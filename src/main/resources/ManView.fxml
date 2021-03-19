@@ -1,34 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-    <center>
-        <TextArea prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-    </center>
-   <bottom>
-      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
-   </bottom>
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-</BorderPane>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="479.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="343.0" layoutY="-14.0" prefHeight="486.0" prefWidth="316.0" style="-fx-background-color: yellow;">
+         <children>
+            <Button fx:id="start" layoutX="38.0" layoutY="298.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="176.0" text="START">
+               <font>
+                  <Font size="35.0" />
+               </font></Button>
+            <CheckBox layoutX="42.0" layoutY="243.0" mnemonicParsing="false" text="Maksymalizacja" />
+             <ComboBox layoutX="51.0" layoutY="52.0" prefHeight="29.0" prefWidth="189.0" promptText="Wybierz metode selekcji">
+                 <items>
+                     <FXCollections fx:factory="observableArrayList">
+                         <String fx:value="Selekcja turniejowa" />
+                         <String fx:value="Kolo ruletki" />
+                     </FXCollections>
+                 </items>
+             </ComboBox>
+            <ComboBox layoutX="51.0" layoutY="97.0" prefHeight="29.0" prefWidth="189.0" promptText="Wybierz metode krzyżowania">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="1" />
+                     <String fx:value="2" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <ComboBox fx:id="m_mutacji" id="m_mutacji" layoutX="51.0" layoutY="142.0" prefHeight="29.0" prefWidth="189.0" promptText="Wybierz metode mutacji">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="12" />
+                     <String fx:value="22324" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+         </children>
+      </Pane>
+      <Pane prefHeight="479.0" prefWidth="337.0" style="-fx-background-color: #000;">
+         <children>
+            <TextField layoutX="28.0" layoutY="28.0" prefHeight="21.0" prefWidth="209.0" promptText="Początek zakresu - A" style="-fx-background-color: gray;" />
+            <TextField layoutX="28.0" layoutY="113.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość populacji" style="-fx-background-color: gray;" />
+            <TextField layoutX="28.0" layoutY="158.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość bitów" style="-fx-background-color: gray;" />
+            <TextField layoutX="28.0" layoutY="200.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość epok" style="-fx-background-color: gray;" />
+            <TextField layoutX="28.0" layoutY="243.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość najlepszych i turniejowych chromosomów" style="-fx-background-color: gray;" />
+            <TextField layoutX="29.0" layoutY="70.0" prefHeight="21.0" prefWidth="209.0" promptText="Koniec zakresu - B" style="-fx-background-color: gray;" />
+            <TextField layoutX="28.0" layoutY="282.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilośc strategji elitarnej" style="-fx-background-color: gray;" />
+            <TextField layoutX="29.0" layoutY="322.0" prefHeight="21.0" prefWidth="209.0" promptText="Prawdopodobieństwo krzyżowania" style="-fx-background-color: gray;" />
+            <TextField layoutX="29.0" layoutY="361.0" prefHeight="21.0" prefWidth="209.0" promptText="Prawdopodbienstwo mutacji" style="-fx-background-color: gray;" />
+            <TextField layoutX="28.0" layoutY="405.0" prefHeight="21.0" prefWidth="209.0" promptText="Prawdopodobieństwo zamiany" style="-fx-background-color: gray;" />
+         </children>
+      </Pane>
+   </children>
+</Pane>
