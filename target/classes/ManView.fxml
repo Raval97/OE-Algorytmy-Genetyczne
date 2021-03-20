@@ -8,54 +8,64 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="479.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane layoutX="343.0" layoutY="-14.0" prefHeight="486.0" prefWidth="316.0" style="-fx-background-color: yellow;">
+      <Pane layoutX="352.0" layoutY="-3.0" prefHeight="465.0" prefWidth="305.0" style="-fx-background-color: #236266;">
          <children>
-            <Button fx:id="start" layoutX="38.0" layoutY="298.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="176.0" text="START">
+            <Button fx:id="start" layoutX="38.0" layoutY="298.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="233.0" style="-fx-background-color: #1e1e9c; -fx-text-fill: #fff" text="START" textFill="#020301" wrapText="true">
                <font>
-                  <Font size="35.0" />
-               </font></Button>
-            <CheckBox layoutX="42.0" layoutY="243.0" mnemonicParsing="false" text="Maksymalizacja" />
-             <ComboBox layoutX="51.0" layoutY="52.0" prefHeight="29.0" prefWidth="189.0" promptText="Wybierz metode selekcji">
+                  <Font size="48.0" />
+               </font>
+            </Button>
+            <CheckBox fx:id="maksymalizacja" layoutX="29.0" layoutY="228.0" mnemonicParsing="false" style="-fx-text-fill: #fff" text="Maksymalizacja" textFill="#0b0c24" />
+             <ComboBox fx:id="metoda_selekcji" layoutX="25.0" layoutY="50.0" prefHeight="29.0" prefWidth="258.0" promptText="Wybierz metode selekcji">
                  <items>
                      <FXCollections fx:factory="observableArrayList">
+                         <String fx:value="Best" />
                          <String fx:value="Selekcja turniejowa" />
                          <String fx:value="Kolo ruletki" />
                      </FXCollections>
                  </items>
              </ComboBox>
-            <ComboBox layoutX="51.0" layoutY="97.0" prefHeight="29.0" prefWidth="189.0" promptText="Wybierz metode krzyżowania">
+            <ComboBox fx:id="metoda_krzyzowania" layoutX="25.0" layoutY="105.0" prefHeight="29.0" prefWidth="258.0" promptText="Wybierz metode krzyżowania">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="1" />
-                     <String fx:value="2" />
+                     <String fx:value="Jednopunkowa" />
+                     <String fx:value="Dwupunktowa" />
+                     <String fx:value="Trzypunktowa" />
+                     <String fx:value="Homo" />
                   </FXCollections>
                </items>
             </ComboBox>
-            <ComboBox fx:id="m_mutacji" id="m_mutacji" layoutX="51.0" layoutY="142.0" prefHeight="29.0" prefWidth="189.0" promptText="Wybierz metode mutacji">
+            <ComboBox fx:id="metoda_mutacji" layoutX="25.0" layoutY="160.0" prefHeight="29.0" prefWidth="258.0" promptText="Wybierz metode mutacji">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="12" />
-                     <String fx:value="22324" />
+                     <String fx:value="Jednopunkowa" />
+                     <String fx:value="Dwupunktowa" />
                   </FXCollections>
                </items>
             </ComboBox>
+            <Text fx:id="error" fill="#3ac930" layoutX="38.0" layoutY="420.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prosze uzupełnić poprawnie wszystkie parametry" textAlignment="CENTER" visible="false" wrappingWidth="233.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
-      <Pane prefHeight="479.0" prefWidth="337.0" style="-fx-background-color: #000;">
+      <Pane prefHeight="462.0" prefWidth="354.0" style="-fx-background-color: #000;">
          <children>
-            <TextField layoutX="28.0" layoutY="28.0" prefHeight="21.0" prefWidth="209.0" promptText="Początek zakresu - A" style="-fx-background-color: gray;" />
-            <TextField layoutX="28.0" layoutY="113.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość populacji" style="-fx-background-color: gray;" />
-            <TextField layoutX="28.0" layoutY="158.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość bitów" style="-fx-background-color: gray;" />
-            <TextField layoutX="28.0" layoutY="200.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość epok" style="-fx-background-color: gray;" />
-            <TextField layoutX="28.0" layoutY="243.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilość najlepszych i turniejowych chromosomów" style="-fx-background-color: gray;" />
-            <TextField layoutX="29.0" layoutY="70.0" prefHeight="21.0" prefWidth="209.0" promptText="Koniec zakresu - B" style="-fx-background-color: gray;" />
-            <TextField layoutX="28.0" layoutY="282.0" prefHeight="21.0" prefWidth="209.0" promptText="Ilośc strategji elitarnej" style="-fx-background-color: gray;" />
-            <TextField layoutX="29.0" layoutY="322.0" prefHeight="21.0" prefWidth="209.0" promptText="Prawdopodobieństwo krzyżowania" style="-fx-background-color: gray;" />
-            <TextField layoutX="29.0" layoutY="361.0" prefHeight="21.0" prefWidth="209.0" promptText="Prawdopodbienstwo mutacji" style="-fx-background-color: gray;" />
-            <TextField layoutX="28.0" layoutY="405.0" prefHeight="21.0" prefWidth="209.0" promptText="Prawdopodobieństwo zamiany" style="-fx-background-color: gray;" />
+            <TextField fx:id="poczatek_zakresu" layoutX="28.0" layoutY="28.0" prefHeight="26.0" prefWidth="292.0" promptText="Początek zakresu - A" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="ilosc_populacji" layoutX="28.0" layoutY="113.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilość populacji" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="ilosc_bitow" layoutX="28.0" layoutY="158.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilość bitów" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="ilosc_epok" layoutX="28.0" layoutY="200.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilość epok" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="ilosc_najlepszych" layoutX="28.0" layoutY="240.0" prefHeight="29.0" prefWidth="292.0" promptText="Ilość najlepszych i turniejowych chromosomów" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="koniec_zakresu" layoutX="29.0" layoutY="70.0" prefHeight="26.0" prefWidth="292.0" promptText="Koniec zakresu - B" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="ilosc_strategii_elitarnej" layoutX="28.0" layoutY="282.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilośc strategji elitarnej" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="prawdopodobienstwo_krzyzowania" layoutX="29.0" layoutY="322.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodobieństwo krzyżowania" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="prawdopodobienstwo_mutacji" layoutX="29.0" layoutY="361.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodbienstwo mutacji" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="prawdopodobienstwo_zamiany" layoutX="28.0" layoutY="405.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodobieństwo zamiany" style="-fx-background-color: gray; -fx-text-fill: #fff" />
          </children>
       </Pane>
    </children>
