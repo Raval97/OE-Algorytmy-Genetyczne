@@ -23,7 +23,7 @@
              <ComboBox fx:id="metoda_selekcji" layoutX="25.0" layoutY="50.0" prefHeight="29.0" prefWidth="258.0" promptText="Wybierz metode selekcji">
                  <items>
                      <FXCollections fx:factory="observableArrayList">
-                         <String fx:value="Best" />
+                         <String fx:value="Selekcja Najlepszych" />
                          <String fx:value="Selekcja turniejowa" />
                          <String fx:value="Kolo ruletki" />
                      </FXCollections>
@@ -35,7 +35,7 @@
                      <String fx:value="Jednopunkowa" />
                      <String fx:value="Dwupunktowa" />
                      <String fx:value="Trzypunktowa" />
-                     <String fx:value="Homo" />
+                     <String fx:value="Jednorodne" />
                   </FXCollections>
                </items>
             </ComboBox>
@@ -47,7 +47,7 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <Text fx:id="error" fill="#3ac930" layoutX="38.0" layoutY="420.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prosze uzupełnić poprawnie wszystkie parametry" textAlignment="CENTER" visible="false" wrappingWidth="233.0">
+            <Text fx:id="info" fill="#3ac930" layoutX="38.0" layoutY="420.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false" wrappingWidth="233.0">
                <font>
                   <Font size="16.0" />
                </font>
@@ -58,14 +58,14 @@
          <children>
             <TextField fx:id="poczatek_zakresu" layoutX="28.0" layoutY="28.0" prefHeight="26.0" prefWidth="292.0" promptText="Początek zakresu - A" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_populacji" layoutX="28.0" layoutY="113.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilość populacji" style="-fx-background-color: gray; -fx-text-fill: #fff" />
-            <TextField fx:id="ilosc_bitow" layoutX="28.0" layoutY="158.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilość bitów" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="dokladnosc" layoutX="28.0" layoutY="158.0" prefHeight="26.0" prefWidth="292.0" promptText="Dokładność" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_epok" layoutX="28.0" layoutY="200.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilość epok" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_najlepszych" layoutX="28.0" layoutY="240.0" prefHeight="29.0" prefWidth="292.0" promptText="Ilość najlepszych i turniejowych chromosomów" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="koniec_zakresu" layoutX="29.0" layoutY="70.0" prefHeight="26.0" prefWidth="292.0" promptText="Koniec zakresu - B" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_strategii_elitarnej" layoutX="28.0" layoutY="282.0" prefHeight="26.0" prefWidth="292.0" promptText="Ilośc strategji elitarnej" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_krzyzowania" layoutX="29.0" layoutY="322.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodobieństwo krzyżowania" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_mutacji" layoutX="29.0" layoutY="361.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodbienstwo mutacji" style="-fx-background-color: gray; -fx-text-fill: #fff" />
-            <TextField fx:id="prawdopodobienstwo_zamiany" layoutX="28.0" layoutY="405.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodobieństwo zamiany" style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="prawdopodobienstwo_inwersji" layoutX="28.0" layoutY="405.0" prefHeight="26.0" prefWidth="292.0" promptText="Prawdopodobieństwo zamiany" style="-fx-background-color: gray; -fx-text-fill: #fff" />
          </children>
       </Pane>
    </children>
