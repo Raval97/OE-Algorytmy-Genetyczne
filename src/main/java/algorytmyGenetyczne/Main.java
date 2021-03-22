@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -40,6 +41,7 @@ public class Main extends Application {
         TextField prawdopodobienstwoMutacjiForm = (TextField) scene.lookup("#prawdopodobienstwo_mutacji");
         TextField prawdopodobienstwoInwersjiForm = (TextField) scene.lookup("#prawdopodobienstwo_inwersji");
         Text info = (Text) scene.lookup("#info");
+        CheckBox maksymalizacjaForm = (CheckBox) scene.lookup("#maksymalizacja");
 
         metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(0));
         metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
@@ -80,10 +82,11 @@ public class Main extends Application {
                     Double prawdopodobienstwoKrzyzowania = Double.parseDouble(prawdopodobienstwoKrzyzowaniaForm.getText());
                     Double prawdopodobienstwoMutacji = Double.parseDouble(prawdopodobienstwoMutacjiForm.getText());
                     Double prawdopodobienstwoInwersji = Double.parseDouble(prawdopodobienstwoInwersjiForm.getText());
+                    Boolean maksymalizacja = maksymalizacjaForm.isSelected();
 
                     long startTime = System.currentTimeMillis();
 
-                    algorytm.oblicz(poczatekZakresu, koniecZakresu, dokladnosc, iloscPopulacji);
+                    algorytm.oblicz(poczatekZakresu, koniecZakresu, dokladnosc, iloscPopulacji, maksymalizacja);
 
 //                    Thread.sleep(1000);
                     // ...
