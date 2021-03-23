@@ -6,20 +6,22 @@ public class Osobnik implements Comparable {
 
     double wartoscFunkcjiPrzystsowania;
     ArrayList<Chromosom> chromosomy;
-    int iloscGenow;
+    int iloscZmiennych;
 
-    public Osobnik(int iloscGenow, int dlugoscChromosomu) {
-        this.iloscGenow = iloscGenow;
+    public Osobnik(int iloscZmiennych, ZakresZmiennej zakresZmiennejX1, ZakresZmiennej zakresZmiennejX2, int dokladnosc) {
+        this.iloscZmiennych = iloscZmiennych;
         wartoscFunkcjiPrzystsowania = 0;
         chromosomy = new ArrayList<>();
-        chromosomy.ensureCapacity(iloscGenow);
-        for (int i = 0; i < iloscGenow; i++)
-            chromosomy.add(new Chromosom(dlugoscChromosomu));
+        chromosomy.ensureCapacity(iloscZmiennych);
+        chromosomy.add(new Chromosom(zakresZmiennejX1, dokladnosc));
+        chromosomy.add(new Chromosom(zakresZmiennejX2, dokladnosc));
     }
 
     public void obliczWartoscFunkcjiPrzystsowania() {
         wartoscFunkcjiPrzystsowania = Algorytm.funkcjaPrzystosowania(
-                chromosomy.get(0).dekodowanieDziesietne(), chromosomy.get(1).dekodowanieDziesietne());
+                chromosomy.get(0).dekodowanieDziesietne(),
+                chromosomy.get(1).dekodowanieDziesietne()
+        );
     }
 
     @Override

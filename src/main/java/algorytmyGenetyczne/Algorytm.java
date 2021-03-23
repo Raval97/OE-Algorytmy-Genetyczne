@@ -1,10 +1,48 @@
 package algorytmyGenetyczne;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Algorytm {
 
-    public Algorytm() {
+    String metodaSelekcji ;
+    String metodaKrzyzowania ;
+    String metodaMutacji ;
+    Double poczatekZakresuX1 ;
+    Double koniecZakresuX1 ;
+    Double poczatekZakresuX2 ;
+    Double koniecZakresuX2 ;
+    Integer iloscPopulacji ;
+    Integer dokladnosc ;
+    Integer iloscEpok ;
+    Integer iloscNajlepszych ;
+    Integer iloscStrategiiElitarnej ;
+    Double prawdopodobienstwoKrzyzowania ;
+    Double prawdopodobienstwoMutacji ;
+    Double prawdopodobienstwoInwersji ;
+    Boolean maksymalizacja ;
+
+    public Algorytm(String metodaSelekcji, String metodaKrzyzowania, String metodaMutacji, Double poczatekZakresuX1,
+                    Double koniecZakresuX1, Double poczatekZakresuX2, Double koniecZakresuX2, Integer iloscPopulacji,
+                    Integer dokladnosc, Integer iloscEpok, Integer iloscNajlepszych, Integer iloscStrategiiElitarnej,
+                    Double prawdopodobienstwoKrzyzowania, Double prawdopodobienstwoMutacji,
+                    Double prawdopodobienstwoInwersji, Boolean maksymalizacja) {
+        this.metodaSelekcji = metodaSelekcji;
+        this.metodaKrzyzowania = metodaKrzyzowania;
+        this.metodaMutacji = metodaMutacji;
+        this.poczatekZakresuX1 = poczatekZakresuX1;
+        this.koniecZakresuX1 = koniecZakresuX1;
+        this.poczatekZakresuX2 = poczatekZakresuX2;
+        this.koniecZakresuX2 = koniecZakresuX2;
+        this.iloscPopulacji = iloscPopulacji;
+        this.dokladnosc = dokladnosc;
+        this.iloscEpok = iloscEpok;
+        this.iloscNajlepszych = iloscNajlepszych;
+        this.iloscStrategiiElitarnej = iloscStrategiiElitarnej;
+        this.prawdopodobienstwoKrzyzowania = prawdopodobienstwoKrzyzowania;
+        this.prawdopodobienstwoMutacji = prawdopodobienstwoMutacji;
+        this.prawdopodobienstwoInwersji = prawdopodobienstwoInwersji;
+        this.maksymalizacja = maksymalizacja;
     }
 
     // MCCORMICK FUNCTION
@@ -13,28 +51,55 @@ public class Algorytm {
         return value;
     }
 
-    public int obliczDlugoscChromosomu(int A, int B, int dokladnosc){
-        return (int) Math.ceil((Math.log((B-A)*Math.pow(10,dokladnosc)) / Math.log(2)) + (Math.log(1) / Math.log(2)));
-    }
-
-    // Selekcja
-    public Osobnik[] selekcjaNajlepszych(Populacja populacja){
+    public Osobnik[] selekcja(String rodzaj, Populacja populacja, int iloscNajlepszych){
         Collections.sort(populacja.osobnicy);
-        return new Osobnik[]{populacja.osobnicy.get(0), populacja.osobnicy.get(1)};
+
+        switch (rodzaj){
+            case "Selekcja turniejowa":
+                return selekcjaTurniejowa(populacja, iloscNajlepszych);
+            case "Kolo ruletki":
+                return selekcjaKoloRuletki(populacja, iloscNajlepszych);
+            default:
+                return selekcjaNajlepszych(populacja, iloscNajlepszych);
+        }
     }
 
-    public void oblicz(int poczatekZakresu, int koniecZakresu, int dokladnosc, int dlPopulacji, boolean czyMaksymalizacja){
+    public Osobnik[] selekcjaNajlepszych(Populacja populacja, int iloscNajlepszych){
+        int rozmiar = iloscPopulacji * iloscNajlepszych / 100;
+        Osobnik[] osobnicyDoReprodukcji = new Osobnik[rozmiar];
+        for (int i = 0; i < rozmiar; i++) {
+            osobnicyDoReprodukcji[i] = populacja.osobnicy.get(i);
+        }
+        return osobnicyDoReprodukcji;
+    }
+
+    public Osobnik[] selekcjaTurniejowa(Populacja populacja, int iloscNajlepszych){
+        return new Osobnik[]{};
+    }
+
+    public Osobnik[] selekcjaKoloRuletki(Populacja populacja, int iloscNajlepszych){
+        return new Osobnik[]{};
+    }
+
+
+    public void oblicz(){
 
         int iloscZmiennych = 2;
-        int dlugoscChromosomu = obliczDlugoscChromosomu(poczatekZakresu, koniecZakresu, dokladnosc);
-        System.out.println(dlugoscChromosomu);
-        Populacja populacja = new Populacja(dlPopulacji, iloscZmiennych, dlugoscChromosomu);
+        int dlugoscChromosomuX1 = Chromosom.obliczDlugoscChromosomu(poczatekZakresuX1, koniecZakresuX1, dokladnosc);
+        int dlugoscChromosomuX2 = Chromosom.obliczDlugoscChromosomu(poczatekZakresuX2, koniecZakresuX2, dokladnosc);
+        System.out.println(dlugoscChromosomuX1);
+        System.out.println(dlugoscChromosomuX2);
+
+        ZakresZmiennej zakresX1 = new ZakresZmiennej(poczatekZakresuX1, koniecZakresuX1);
+        ZakresZmiennej zakresX2 = new ZakresZmiennej(poczatekZakresuX2, koniecZakresuX2);
+        Populacja populacja = new Populacja(iloscPopulacji, iloscZmiennych, zakresX1, zakresX2, dokladnosc);
         System.out.println(populacja.toString());
+
         populacja.osobnicy.forEach(x -> x.obliczWartoscFunkcjiPrzystsowania());
         populacja.osobnicy.forEach(x -> System.out.println(x.wartoscFunkcjiPrzystsowania));
 
-        Osobnik[] osobnicyDoreprodukcji = selekcjaNajlepszych(populacja);
-        System.out.println(osobnicyDoreprodukcji[0].toString() + osobnicyDoreprodukcji[1].toString());
+        Osobnik[] osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja, iloscNajlepszych);
+        Arrays.stream(osobnicyDoreprodukcji).forEach(x -> System.out.print(x.toString()));
     };
 
 }

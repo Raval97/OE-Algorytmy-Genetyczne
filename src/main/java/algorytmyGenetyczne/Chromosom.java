@@ -9,9 +9,11 @@ public class Chromosom {
 
     ArrayList<Integer> geny;
     int dlugosc;
+    ZakresZmiennej zakres;
 
-    public Chromosom(int dlugosc) {
-        this.dlugosc = dlugosc;
+    public Chromosom(ZakresZmiennej zakres, int dokladnosc) {
+        this.zakres = zakres;
+        this.dlugosc = obliczDlugoscChromosomu(zakres.zakresPoczatkowy, zakres.zakresKoncowy, dokladnosc);
         Random random = new Random();
         geny = new ArrayList<>();
         geny.ensureCapacity(dlugosc);
@@ -21,13 +23,17 @@ public class Chromosom {
 
     public Double dekodowanieDziesietne(){
         int decimal = Integer.parseInt(getWartoscToString(), 2);
-        return -10 + decimal * ( 20 / (Math.pow(2,25) - 1));
+        return zakres.zakresPoczatkowy + decimal * ( (zakres.zakresKoncowy - zakres.zakresPoczatkowy) / (Math.pow(2,dlugosc) - 1));
     }
 
     public String getWartoscToString() {
         final String[] value = {""};
         geny.forEach(e -> value[0] += e.toString());
         return value[0];
+    }
+
+    public static int obliczDlugoscChromosomu(Double A, Double B, int dokladnosc){
+        return (int) Math.ceil((Math.log((B-A)*Math.pow(10,dokladnosc)) / Math.log(2)) + (Math.log(1) / Math.log(2)));
     }
 
     @Override
@@ -38,4 +44,7 @@ public class Chromosom {
         value[0] += "\t\t";
         return value[0];
     }
+
 }
+
+

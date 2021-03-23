@@ -30,8 +30,10 @@ public class Main extends Application {
         ComboBox metodaSelekcjiForm = (ComboBox) scene.lookup("#metoda_selekcji");
         ComboBox metodaKrzyzowaniaForm = (ComboBox) scene.lookup("#metoda_krzyzowania");
         ComboBox metodaMutacjiForm = (ComboBox) scene.lookup("#metoda_mutacji");
-        TextField poczatekZakresuForm = (TextField) scene.lookup("#poczatek_zakresu");
-        TextField koniecZakresuForm = (TextField) scene.lookup("#koniec_zakresu");
+        TextField poczatekZakresuX1Form = (TextField) scene.lookup("#poczatek_zakresu_x1");
+        TextField koniecZakresuX1Form = (TextField) scene.lookup("#koniec_zakresu_x1");
+        TextField poczatekZakresuX2Form = (TextField) scene.lookup("#poczatek_zakresu_x2");
+        TextField koniecZakresuX2Form = (TextField) scene.lookup("#koniec_zakresu_x2");
         TextField iloscPopulacjiForm = (TextField) scene.lookup("#ilosc_populacji");
         TextField dokladnoscForm = (TextField) scene.lookup("#dokladnosc");
         TextField iloscEpokForm = (TextField) scene.lookup("#ilosc_epok");
@@ -46,19 +48,18 @@ public class Main extends Application {
         metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(0));
         metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
         metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
-        poczatekZakresuForm.setText("1");
-        koniecZakresuForm.setText("10");
+        poczatekZakresuX1Form.setText("-1.5");
+        koniecZakresuX1Form.setText("4");
+        poczatekZakresuX2Form.setText("-3");
+        koniecZakresuX2Form.setText("4");
         iloscPopulacjiForm.setText("10");
-        dokladnoscForm.setText("6");
+        dokladnoscForm.setText("4");
         iloscEpokForm.setText("1000");
-        iloscNajlepszychForm.setText("20");
-        iloscStrategiiElitarnejForm.setText("10");
+        iloscNajlepszychForm.setText("30");
+        iloscStrategiiElitarnejForm.setText("1");
         prawdopodobienstwoKrzyzowaniaForm.setText("0.6");
-        prawdopodobienstwoMutacjiForm.setText("0.4");
+        prawdopodobienstwoMutacjiForm.setText("0.1");
         prawdopodobienstwoInwersjiForm.setText("0.1");
-
-
-        Algorytm algorytm = new Algorytm();
 
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -72,8 +73,10 @@ public class Main extends Application {
                     String metodaSelekcji = metodaSelekcjiForm.getValue().toString();
                     String metodaKrzyzowania = metodaKrzyzowaniaForm.getValue().toString();
                     String metodaMutacji = metodaMutacjiForm.getValue().toString();
-                    Integer poczatekZakresu = Integer.parseInt(poczatekZakresuForm.getText());
-                    Integer koniecZakresu = Integer.parseInt(koniecZakresuForm.getText());
+                    Double poczatekZakresuX1 = Double.parseDouble(poczatekZakresuX1Form.getText());
+                    Double koniecZakresuX1 = Double.parseDouble(koniecZakresuX1Form.getText());
+                    Double poczatekZakresuX2 = Double.parseDouble(poczatekZakresuX2Form.getText());
+                    Double koniecZakresuX2 = Double.parseDouble(koniecZakresuX2Form.getText());
                     Integer iloscPopulacji = Integer.parseInt(iloscPopulacjiForm.getText());
                     Integer dokladnosc = Integer.parseInt(dokladnoscForm.getText());
                     Integer iloscEpok = Integer.parseInt(iloscEpokForm.getText());
@@ -86,10 +89,25 @@ public class Main extends Application {
 
                     long startTime = System.currentTimeMillis();
 
-                    algorytm.oblicz(poczatekZakresu, koniecZakresu, dokladnosc, iloscPopulacji, maksymalizacja);
-
-//                    Thread.sleep(1000);
-                    // ...
+                    Algorytm algorytm = new Algorytm(
+                            metodaSelekcji,
+                            metodaKrzyzowania,
+                            metodaMutacji,
+                            poczatekZakresuX1,
+                            koniecZakresuX1,
+                            poczatekZakresuX2,
+                            koniecZakresuX2,
+                            iloscPopulacji,
+                            dokladnosc,
+                            iloscEpok,
+                            iloscNajlepszych,
+                            iloscStrategiiElitarnej,
+                            prawdopodobienstwoKrzyzowania,
+                            prawdopodobienstwoMutacji,
+                            prawdopodobienstwoInwersji,
+                            maksymalizacja
+                    );
+                    algorytm.oblicz();
 
                     long endTime = System.currentTimeMillis();
                     NumberFormat formatter = new DecimalFormat("#0.00000");
