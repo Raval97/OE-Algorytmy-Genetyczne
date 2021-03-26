@@ -45,16 +45,16 @@ public class Main extends Application {
         Text info = (Text) scene.lookup("#info");
         CheckBox maksymalizacjaForm = (CheckBox) scene.lookup("#maksymalizacja");
 
-        metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(0));
+        metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(2));
         metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
         metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
         poczatekZakresuX1Form.setText("-1.5");
         koniecZakresuX1Form.setText("4");
         poczatekZakresuX2Form.setText("-3");
         koniecZakresuX2Form.setText("4");
-        iloscPopulacjiForm.setText("10");
         dokladnoscForm.setText("4");
-        iloscEpokForm.setText("1000");
+        iloscPopulacjiForm.setText("100");
+        iloscEpokForm.setText("50");
         iloscNajlepszychForm.setText("30");
         iloscStrategiiElitarnejForm.setText("1");
         prawdopodobienstwoKrzyzowaniaForm.setText("0.6");
@@ -86,6 +86,8 @@ public class Main extends Application {
                     Double prawdopodobienstwoMutacji = Double.parseDouble(prawdopodobienstwoMutacjiForm.getText());
                     Double prawdopodobienstwoInwersji = Double.parseDouble(prawdopodobienstwoInwersjiForm.getText());
                     Boolean maksymalizacja = maksymalizacjaForm.isSelected();
+
+                    iloscStrategiiElitarnej += iloscStrategiiElitarnej%2 == 1 ? 1 : 0;
 
                     long startTime = System.currentTimeMillis();
 

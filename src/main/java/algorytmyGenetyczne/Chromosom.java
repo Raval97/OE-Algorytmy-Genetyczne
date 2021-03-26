@@ -3,11 +3,12 @@ package algorytmyGenetyczne;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Chromosom {
 
-    ArrayList<Integer> geny;
+    List<Integer> geny;
     int dlugosc;
     ZakresZmiennej zakres;
 
@@ -16,9 +17,14 @@ public class Chromosom {
         this.dlugosc = obliczDlugoscChromosomu(zakres.zakresPoczatkowy, zakres.zakresKoncowy, dokladnosc);
         Random random = new Random();
         geny = new ArrayList<>();
-        geny.ensureCapacity(dlugosc);
         for (int i = 0; i < dlugosc; i++)
             geny.add(Math.abs(random.nextInt() % 2));
+    }
+
+    public Chromosom(List<Integer> geny, ZakresZmiennej zakres) {
+        this.dlugosc = geny.size();
+        this.zakres = zakres;
+        this.geny = geny;
     }
 
     public Double dekodowanieDziesietne(){

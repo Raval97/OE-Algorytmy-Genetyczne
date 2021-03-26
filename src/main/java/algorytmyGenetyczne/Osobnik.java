@@ -1,20 +1,25 @@
 package algorytmyGenetyczne;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 public class Osobnik implements Comparable {
 
     double wartoscFunkcjiPrzystsowania;
-    ArrayList<Chromosom> chromosomy;
+    List<Chromosom> chromosomy;
     int iloscZmiennych;
 
     public Osobnik(int iloscZmiennych, ZakresZmiennej zakresZmiennejX1, ZakresZmiennej zakresZmiennejX2, int dokladnosc) {
         this.iloscZmiennych = iloscZmiennych;
         wartoscFunkcjiPrzystsowania = 0;
         chromosomy = new ArrayList<>();
-        chromosomy.ensureCapacity(iloscZmiennych);
         chromosomy.add(new Chromosom(zakresZmiennejX1, dokladnosc));
         chromosomy.add(new Chromosom(zakresZmiennejX2, dokladnosc));
+    }
+
+    public Osobnik(Chromosom chromosomyX1, Chromosom chromosomyX2) {
+        this.chromosomy = (List<Chromosom>) Arrays.asList(chromosomyX1, chromosomyX2);
     }
 
     public void obliczWartoscFunkcjiPrzystsowania() {
@@ -38,3 +43,4 @@ public class Osobnik implements Comparable {
         return value[0];
     }
 }
+
