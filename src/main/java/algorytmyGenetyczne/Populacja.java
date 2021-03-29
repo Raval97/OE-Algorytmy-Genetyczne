@@ -9,11 +9,11 @@ public class Populacja {
     List<Osobnik> osobnicy;
     int wielkoscPopulacji;
 
-    public Populacja(int wielkoscPopulacji, int iloscZmiennych, ZakresZmiennej zakresX1, ZakresZmiennej zakresX2, int dokladnosc) {
+    public Populacja(int wielkoscPopulacji, ZakresZmiennej[] zakresy, int dokladnosc) {
         this.wielkoscPopulacji = wielkoscPopulacji;
         osobnicy = new ArrayList<>();
         for (int i = 0; i < this.wielkoscPopulacji; i++)
-            osobnicy.add(new Osobnik(iloscZmiennych, zakresX1, zakresX2, dokladnosc));
+            osobnicy.add(new Osobnik(zakresy, dokladnosc));
     }
 
     public double obliczSredniaFunkcjePrzystsowania(){

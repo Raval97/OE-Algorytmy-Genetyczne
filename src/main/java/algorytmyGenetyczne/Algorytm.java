@@ -1,11 +1,6 @@
 package algorytmyGenetyczne;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 public class Algorytm {
 
@@ -65,7 +60,7 @@ public class Algorytm {
         switch (rodzaj) {
             case "Selekcja turniejowa":
                 return selekcjaTurniejowa(osobnicy, rozmiar, maksymalizacja);
-            case "Kolo ruletki":
+            case "Selekcja - Koło Ruletki":
                 return selekcjaKoloRuletki(osobnicy, rozmiar, maksymalizacja);
             default:
                 return selekcjaNajlepszych(osobnicy, rozmiar, maksymalizacja);
@@ -140,15 +135,15 @@ public class Algorytm {
                 List<List<Integer>> x1 = new ArrayList<>(new ArrayList<>());
                 List<List<Integer>> x2 = new ArrayList<>(new ArrayList<>());
                 switch (rodzaj) {
-                    case "Jednopunkowa":
+                    case "Krzyżowanie Jednopunkowe":
                         x1 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
                         x2 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
                         break;
-                    case "Dwupunktowa":
+                    case "Krzyzowanie Dwupunktowe":
                         x1 = krzyzowanieDwupunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
                         x2 = krzyzowanieDwupunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
                         break;
-                    case "Trzypunktowa":
+                    case "Krzyzowanie Trzypunktowe":
                         x1 = krzyzowanieTrzypunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
                         x2 = krzyzowanieTrzypunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
                         break;
@@ -313,11 +308,14 @@ public class Algorytm {
     private Osobnik mutacja(String rodzaj, Osobnik osobnik, Double prawdopodobienstwo) {
         if (prawdopodobienstwo >= random.nextDouble()) {
             switch (rodzaj) {
-                case "Jednopunkowa":
+                case "Mutacja Jednopunkowa":
                     osobnik = mutacjaJednopunktowa(osobnik);
                     break;
-                default:
+                case "Mutacja Dwupunktowa":
                     osobnik = mutacjaDwupunktowa(osobnik);
+                    break;
+                default:
+                    osobnik = mutacjaBrzegowa(osobnik);
                     break;
             }
         }
@@ -346,25 +344,58 @@ public class Algorytm {
         return osobnik;
     }
 
+    public Osobnik mutacjaBrzegowa(Osobnik osobnik){
+        Double rand = random.nextDouble();
+        if(rand > 0.5) {
+            osobnik.chromosomy.get(0).geny.set(0, osobnik.chromosomy.get(0).geny.get(0) == 1 ? 1 : 0);
+            osobnik.chromosomy.get(1).geny.set(0, osobnik.chromosomy.get(1).geny.get(0) == 1 ? 1 : 0);
+        } else {
+            Integer locusEnd = osobnik.chromosomy.get(0).geny.size() - 1;
+            osobnik.chromosomy.get(0).geny.set(locusEnd, osobnik.chromosomy.get(0).geny.get(locusEnd) == 1 ? 1 : 0);
+            osobnik.chromosomy.get(1).geny.set(locusEnd, osobnik.chromosomy.get(1).geny.get(locusEnd) == 1 ? 1 : 0);
+        }
+        return osobnik;
+    }
+
+// #####################################################################################
+// ###############################  INWERSJA  ##########################################
+// #####################################################################################
+    private Osobnik inwersja(Osobnik osobnik, Double prawdopodobienstwo){
+        if (prawdopodobienstwo >= random.nextDouble())
+            osobnik.chromosomy.replaceAll(chr ->  inwersjaChromosomu(chr));
+        return osobnik;
+    }
+
+    private Chromosom inwersjaChromosomu(Chromosom chromosom) {
+        Double rand1 = ((double) (random.nextInt(40) + 10)) / 100;
+        Double rand2 = ((double) (random.nextInt(40) + 50)) / 100;
+        int locus1 = (int) ((double) chromosom.dlugosc * rand1);
+        int locus2 = (int) ((double) chromosom.dlugosc * rand2);
+        for (int i = locus1; i < locus2; i++)
+            chromosom.geny.set(i, chromosom.geny.get(i) == 1 ? 0 : 1);
+        return chromosom;
+    }
+
+
     public void oblicz() {
 
-        int iloscZmiennych = 2;
-
-        ZakresZmiennej zakresX1 = new ZakresZmiennej(poczatekZakresuX1, koniecZakresuX1);
-        ZakresZmiennej zakresX2 = new ZakresZmiennej(poczatekZakresuX2, koniecZakresuX2);
-        Populacja populacja = new Populacja(wielkoscPopulacji, iloscZmiennych, zakresX1, zakresX2, dokladnosc);
+        ZakresZmiennej[] zakresyZmiennych = {
+                new ZakresZmiennej(poczatekZakresuX1, koniecZakresuX1),
+                new ZakresZmiennej(poczatekZakresuX2, koniecZakresuX2)};
+        Populacja populacja = new Populacja(wielkoscPopulacji, zakresyZmiennych, dokladnosc);
 
         System.out.print(populacja.toString());
         System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania()+" \n");
 
+        List<Osobnik> osobnicyDoreprodukcji = new ArrayList<>();
+        List<Osobnik> osobnicyOpercajeGenetyczne = new ArrayList<>();
         for (int i = 0; i < iloscEpok; i++) {
-//        for (int i = 0; i < 1; i++) {
-            List<Osobnik> osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, iloscNajlepszych, maksymalizacja);
+            osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, iloscNajlepszych, maksymalizacja);
+            osobnicyOpercajeGenetyczne = krzyzowanie(metodaKrzyzowania, osobnicyDoreprodukcji, prawdopodobienstwoKrzyzowania, (wielkoscPopulacji - iloscStrategiiElitarnej));
+            osobnicyOpercajeGenetyczne.replaceAll(o -> mutacja(metodaMutacji, o, prawdopodobienstwoMutacji));
+            osobnicyOpercajeGenetyczne.replaceAll(o -> inwersja(o, prawdopodobienstwoMutacji));
             populacja.osobnicy.removeAll(populacja.osobnicy.subList(iloscStrategiiElitarnej, populacja.wielkoscPopulacji));
-            List<Osobnik> osobnicyPoKrzyzowaniu = krzyzowanie(metodaKrzyzowania, osobnicyDoreprodukcji,
-                    prawdopodobienstwoKrzyzowania, (wielkoscPopulacji - iloscStrategiiElitarnej));
-            populacja.osobnicy.addAll(osobnicyPoKrzyzowaniu);
-            populacja.osobnicy.replaceAll(o -> mutacja(metodaMutacji, o, prawdopodobienstwoMutacji));
+            populacja.osobnicy.addAll(osobnicyOpercajeGenetyczne);
             System.out.println("epoka " + (i+1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania());
 //            System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik().wartoscFunkcjiPrzystsowania);
 //            System.out.println("najlepszy_osobnik: " + populacja.najlepszyOsobnik().toString());

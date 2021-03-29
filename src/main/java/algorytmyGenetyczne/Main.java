@@ -30,6 +30,7 @@ public class Main extends Application {
         ComboBox metodaSelekcjiForm = (ComboBox) scene.lookup("#metoda_selekcji");
         ComboBox metodaKrzyzowaniaForm = (ComboBox) scene.lookup("#metoda_krzyzowania");
         ComboBox metodaMutacjiForm = (ComboBox) scene.lookup("#metoda_mutacji");
+        ComboBox rodzajOptymalizacjiForm = (ComboBox) scene.lookup("#rodzaj_optymalizacji");
         TextField poczatekZakresuX1Form = (TextField) scene.lookup("#poczatek_zakresu_x1");
         TextField koniecZakresuX1Form = (TextField) scene.lookup("#koniec_zakresu_x1");
         TextField poczatekZakresuX2Form = (TextField) scene.lookup("#poczatek_zakresu_x2");
@@ -43,11 +44,11 @@ public class Main extends Application {
         TextField prawdopodobienstwoMutacjiForm = (TextField) scene.lookup("#prawdopodobienstwo_mutacji");
         TextField prawdopodobienstwoInwersjiForm = (TextField) scene.lookup("#prawdopodobienstwo_inwersji");
         Text info = (Text) scene.lookup("#info");
-        CheckBox maksymalizacjaForm = (CheckBox) scene.lookup("#maksymalizacja");
 
         metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(2));
         metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
         metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
+        rodzajOptymalizacjiForm.setValue(rodzajOptymalizacjiForm.getItems().get(0));
         poczatekZakresuX1Form.setText("-1.5");
         koniecZakresuX1Form.setText("4");
         poczatekZakresuX2Form.setText("-3");
@@ -56,19 +57,14 @@ public class Main extends Application {
         iloscPopulacjiForm.setText("100");
         iloscEpokForm.setText("50");
         iloscNajlepszychForm.setText("30");
-        iloscStrategiiElitarnejForm.setText("1");
-        prawdopodobienstwoKrzyzowaniaForm.setText("0.6");
+        iloscStrategiiElitarnejForm.setText("2");
+        prawdopodobienstwoKrzyzowaniaForm.setText("0.7");
         prawdopodobienstwoMutacjiForm.setText("0.1");
         prawdopodobienstwoInwersjiForm.setText("0.1");
 
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-
-                start.setText("W trakcie wykonywania ...");
-                start.setStyle("-fx-font-size:16; -fx-background-color: #7f7fd7; -fx-text-fill: #fff");
-                start.setDisable(true);
-
                 try {
                     String metodaSelekcji = metodaSelekcjiForm.getValue().toString();
                     String metodaKrzyzowania = metodaKrzyzowaniaForm.getValue().toString();
@@ -82,12 +78,15 @@ public class Main extends Application {
                     Integer iloscEpok = Integer.parseInt(iloscEpokForm.getText());
                     Integer iloscNajlepszych = Integer.parseInt(iloscNajlepszychForm.getText());
                     Integer iloscStrategiiElitarnej = Integer.parseInt(iloscStrategiiElitarnejForm.getText());
+                    iloscStrategiiElitarnej += iloscStrategiiElitarnej%2 == 1 ? 1 : 0;
                     Double prawdopodobienstwoKrzyzowania = Double.parseDouble(prawdopodobienstwoKrzyzowaniaForm.getText());
                     Double prawdopodobienstwoMutacji = Double.parseDouble(prawdopodobienstwoMutacjiForm.getText());
                     Double prawdopodobienstwoInwersji = Double.parseDouble(prawdopodobienstwoInwersjiForm.getText());
-                    Boolean maksymalizacja = maksymalizacjaForm.isSelected();
+                    Boolean maksymalizacja = rodzajOptymalizacjiForm.getValue().toString().equals("Maksymalizacja");
 
-                    iloscStrategiiElitarnej += iloscStrategiiElitarnej%2 == 1 ? 1 : 0;
+                    start.setText("W trakcie wykonywania ...");
+                    start.setStyle("-fx-font-size:16; -fx-background-color: #7f7fd7; -fx-text-fill: #fff");
+                    start.setDisable(true);
 
                     long startTime = System.currentTimeMillis();
 
@@ -112,6 +111,7 @@ public class Main extends Application {
                     algorytm.oblicz();
 
                     long endTime = System.currentTimeMillis();
+
                     NumberFormat formatter = new DecimalFormat("#0.00000");
                     String time = formatter.format((endTime - startTime) / 1000d);
                     info.setText("Czas wykonania algorytmu: " + time + " seconds");

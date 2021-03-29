@@ -10,12 +10,12 @@ public class Osobnik implements Comparable {
     List<Chromosom> chromosomy;
     int iloscZmiennych;
 
-    public Osobnik(int iloscZmiennych, ZakresZmiennej zakresZmiennejX1, ZakresZmiennej zakresZmiennejX2, int dokladnosc) {
-        this.iloscZmiennych = iloscZmiennych;
+    public Osobnik(ZakresZmiennej[] zakresyZmiennych, int dokladnosc) {
+        this.iloscZmiennych = zakresyZmiennych.length;
         wartoscFunkcjiPrzystsowania = 0;
         chromosomy = new ArrayList<>();
-        chromosomy.add(new Chromosom(zakresZmiennejX1, dokladnosc));
-        chromosomy.add(new Chromosom(zakresZmiennejX2, dokladnosc));
+        for (int i = 0; i < iloscZmiennych; i++)
+            chromosomy.add(new Chromosom(zakresyZmiennych[i], dokladnosc));
     }
 
     public Osobnik(Chromosom chromosomyX1, Chromosom chromosomyX2) {
