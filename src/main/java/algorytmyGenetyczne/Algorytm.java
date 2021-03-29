@@ -14,7 +14,7 @@ public class Algorytm {
     Integer wielkoscPopulacji;
     Integer dokladnosc;
     Integer iloscEpok;
-    Integer iloscNajlepszych;
+    Double procentNajlepszych;
     Integer iloscStrategiiElitarnej;
     Double prawdopodobienstwoKrzyzowania;
     Double prawdopodobienstwoMutacji;
@@ -25,7 +25,7 @@ public class Algorytm {
 
     public Algorytm(String metodaSelekcji, String metodaKrzyzowania, String metodaMutacji, Double poczatekZakresuX1,
                     Double koniecZakresuX1, Double poczatekZakresuX2, Double koniecZakresuX2, Integer wielkoscPopulacji,
-                    Integer dokladnosc, Integer iloscEpok, Integer iloscNajlepszych, Integer iloscStrategiiElitarnej,
+                    Integer dokladnosc, Integer iloscEpok, Double procentNajlepszych, Integer iloscStrategiiElitarnej,
                     Double prawdopodobienstwoKrzyzowania, Double prawdopodobienstwoMutacji,
                     Double prawdopodobienstwoInwersji, Boolean maksymalizacja) {
         this.metodaSelekcji = metodaSelekcji;
@@ -38,7 +38,7 @@ public class Algorytm {
         this.wielkoscPopulacji = wielkoscPopulacji;
         this.dokladnosc = dokladnosc;
         this.iloscEpok = iloscEpok;
-        this.iloscNajlepszych = iloscNajlepszych;
+        this.procentNajlepszych = procentNajlepszych;
         this.iloscStrategiiElitarnej = iloscStrategiiElitarnej;
         this.prawdopodobienstwoKrzyzowania = prawdopodobienstwoKrzyzowania;
         this.prawdopodobienstwoMutacji = prawdopodobienstwoMutacji;
@@ -47,7 +47,7 @@ public class Algorytm {
     }
 
     // MCCORMICK FUNCTION
-    public static double funkcjaPrzystosowania(double x1, double x2) {
+    public static double funkcjaDoOptymalizacji(double x1, double x2) {
         double value = Math.sin((x1 + x2)) + Math.pow((x1 - x2), 2) - 1.5 * x1 + 2.5 * x2 + 1;
         return value;
     }
@@ -55,8 +55,8 @@ public class Algorytm {
 // #####################################################################################
 // ###############################  SELEKCJA  ##########################################
 // #####################################################################################
-    public List<Osobnik> selekcja(String rodzaj, List<Osobnik> osobnicy, int iloscNajlepszych, boolean maksymalizacja) {
-        int rozmiar = wielkoscPopulacji * iloscNajlepszych / 100;
+    private List<Osobnik> selekcja(String rodzaj, List<Osobnik> osobnicy, Double iloscNajlepszych, boolean maksymalizacja) {
+        int rozmiar = (int) (wielkoscPopulacji * iloscNajlepszych);
         switch (rodzaj) {
             case "Selekcja turniejowa":
                 return selekcjaTurniejowa(osobnicy, rozmiar, maksymalizacja);
@@ -67,22 +67,36 @@ public class Algorytm {
         }
     }
 
-    public List<Osobnik> selekcjaNajlepszych(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
+    private List<Osobnik> selekcjaNajlepszych(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
         Collections.sort(osobnicy);
         if(maksymalizacja)
-            Collections.reverse( osobnicy);
+            Collections.reverse(osobnicy);
         List<Osobnik> osobnicyDoReprodukcji = new ArrayList<>();
-        Osobnik o = osobnicy.get(0);
         for (int i = 0; i < rozmiar; i++)
             osobnicyDoReprodukcji.add(osobnicy.get(i));
         return osobnicyDoReprodukcji;
     }
 
-    public List<Osobnik> selekcjaTurniejowa(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
-        return new ArrayList<Osobnik>();
+    private List<Osobnik> selekcjaTurniejowa(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
+        Collections.shuffle(osobnicy);
+        List<Osobnik> osobnicyDoReprodukcji = new ArrayList<>();
+        List<List<Osobnik>> listaTurniejow = new ArrayList<>();
+        double sredniaDlugoscGrupy = (double) osobnicy.size() / rozmiar;
+        double temp = 0;
+        while (temp < osobnicy.size()-1){
+            listaTurniejow.add(osobnicy.subList((int)temp, (int) (temp+sredniaDlugoscGrupy)));
+            temp += sredniaDlugoscGrupy;
+        }
+        listaTurniejow.forEach(turniej -> {
+            Collections.sort(turniej);
+            if(maksymalizacja)
+                Collections.reverse(turniej);
+            osobnicyDoReprodukcji.add(turniej.get(0));
+        });
+        return osobnicyDoReprodukcji;
     }
 
-    public List<Osobnik> selekcjaKoloRuletki(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
+    private List<Osobnik> selekcjaKoloRuletki(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
         List<Osobnik> osobnicyDoReprodukcji = new ArrayList<>();
         double sumaFx = 0;
         double sumaCzesciowa = 0;
@@ -122,7 +136,7 @@ public class Algorytm {
 // #####################################################################################
 // ###############################  KRZYZOWANIE  #######################################
 // #####################################################################################
-    public List<Osobnik> krzyzowanie(String rodzaj, List<Osobnik> osobnicyDoGeneracji, Double prawdopodobienstwo, int dlugosc) {
+    private List<Osobnik> krzyzowanie(String rodzaj, List<Osobnik> osobnicyDoGeneracji, Double prawdopodobienstwo, int dlugosc) {
         List<Osobnik> nowaGeneracja = new ArrayList<>();
         while (nowaGeneracja.size() < dlugosc) {
             int randInt1 = random.nextInt(osobnicyDoGeneracji.size());
@@ -322,7 +336,7 @@ public class Algorytm {
         return osobnik;
     }
 
-    public Osobnik mutacjaJednopunktowa(Osobnik osobnik){
+    private Osobnik mutacjaJednopunktowa(Osobnik osobnik){
         Double rand = random.nextDouble();
         int locusX1 = (int) ((double) osobnik.chromosomy.get(0).dlugosc * rand);
         int locusX2 = (int) ((double) osobnik.chromosomy.get(1).dlugosc * rand);
@@ -331,7 +345,7 @@ public class Algorytm {
         return osobnik;
     }
 
-    public Osobnik mutacjaDwupunktowa(Osobnik osobnik){
+    private Osobnik mutacjaDwupunktowa(Osobnik osobnik){
         Double rand = random.nextDouble();
         int locusX1_1 = (int) ((double) osobnik.chromosomy.get(0).dlugosc * rand);
         int locusX1_2 = (int) ((double) osobnik.chromosomy.get(0).dlugosc * rand);
@@ -344,7 +358,7 @@ public class Algorytm {
         return osobnik;
     }
 
-    public Osobnik mutacjaBrzegowa(Osobnik osobnik){
+    private Osobnik mutacjaBrzegowa(Osobnik osobnik){
         Double rand = random.nextDouble();
         if(rand > 0.5) {
             osobnik.chromosomy.get(0).geny.set(0, osobnik.chromosomy.get(0).geny.get(0) == 1 ? 1 : 0);
@@ -376,35 +390,30 @@ public class Algorytm {
         return chromosom;
     }
 
-
     public void oblicz() {
 
         ZakresZmiennej[] zakresyZmiennych = {
                 new ZakresZmiennej(poczatekZakresuX1, koniecZakresuX1),
                 new ZakresZmiennej(poczatekZakresuX2, koniecZakresuX2)};
         Populacja populacja = new Populacja(wielkoscPopulacji, zakresyZmiennych, dokladnosc);
-
-        System.out.print(populacja.toString());
-        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania()+" \n");
-
         List<Osobnik> osobnicyDoreprodukcji = new ArrayList<>();
         List<Osobnik> osobnicyOpercajeGenetyczne = new ArrayList<>();
+
+//        System.out.print(populacja.toString());
+        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania(5)+" \n");
+
         for (int i = 0; i < iloscEpok; i++) {
-            osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, iloscNajlepszych, maksymalizacja);
+            osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, procentNajlepszych, maksymalizacja);
             osobnicyOpercajeGenetyczne = krzyzowanie(metodaKrzyzowania, osobnicyDoreprodukcji, prawdopodobienstwoKrzyzowania, (wielkoscPopulacji - iloscStrategiiElitarnej));
             osobnicyOpercajeGenetyczne.replaceAll(o -> mutacja(metodaMutacji, o, prawdopodobienstwoMutacji));
             osobnicyOpercajeGenetyczne.replaceAll(o -> inwersja(o, prawdopodobienstwoMutacji));
             populacja.osobnicy.removeAll(populacja.osobnicy.subList(iloscStrategiiElitarnej, populacja.wielkoscPopulacji));
             populacja.osobnicy.addAll(osobnicyOpercajeGenetyczne);
-            System.out.println("epoka " + (i+1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania());
-//            System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik().wartoscFunkcjiPrzystsowania);
-//            System.out.println("najlepszy_osobnik: " + populacja.najlepszyOsobnik().toString());
-//            osobnicyDoreprodukcji.forEach(x -> System.out.print(x.toString()));
-//            System.out.print("\n" + populacja.toString());
+            System.out.print("epoka  " + (i+1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + "\t\t");
+            System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania);
+//            System.out.println("najlepszy_osobnik: " + populacja.najlepszyOsobnik(maksymalizacja).toString());
         }
 
     }
-
-
 
 }

@@ -10,9 +10,9 @@
    <children>
       <Pane layoutX="336.0" layoutY="79.0" prefHeight="450.0" prefWidth="295.0" style="-fx-background-color: #236266;">
          <children>
-            <Button fx:id="start" layoutX="35.0" layoutY="271.0" mnemonicParsing="false" prefHeight="95.0" prefWidth="240.0" style="-fx-background-color: #1e1e9c; -fx-text-fill: #fff" text="START" textFill="#020301" wrapText="true">
+            <Button fx:id="start" layoutX="35.0" layoutY="271.0" mnemonicParsing="false" prefHeight="95.0" prefWidth="240.0" style="-fx-background-color: #1e1e9c; -fx-text-fill: #fff" text="START" textFill="#f9fcf7" wrapText="true">
                <font>
-                  <Font name="DejaVu Sans Bold" size="48.0" />
+                  <Font name="DejaVu Sans Condensed Bold" size="48.0" />
                </font>
             </Button>
              <ComboBox fx:id="metoda_selekcji" layoutX="25.0" layoutY="50.0" prefHeight="30.0" prefWidth="258.0" promptText="Wybierz metode selekcji">
@@ -67,13 +67,13 @@
             <TextField fx:id="dokladnosc" layoutX="266.0" layoutY="110.0" prefHeight="26.0" prefWidth="68.0" promptText="..." style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_populacji" layoutX="266.0" layoutY="150.0" prefHeight="26.0" prefWidth="68.0" promptText="..." style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_epok" layoutX="266.0" layoutY="190.0" prefHeight="26.0" prefWidth="68.0" promptText="..." style="-fx-background-color: gray; -fx-text-fill: #fff" />
-            <TextField fx:id="ilosc_najlepszych" layoutX="266.0" layoutY="230.0" prefHeight="26.0" prefWidth="68.0" promptText="..." style="-fx-background-color: gray; -fx-text-fill: #fff" />
+            <TextField fx:id="ilosc_najlepszych" layoutX="266.0" layoutY="230.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="ilosc_strategii_elitarnej" layoutX="266.0" layoutY="270.0" prefHeight="26.0" prefWidth="68.0" promptText="..." style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_krzyzowania" layoutX="266.0" layoutY="310.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_mutacji" layoutX="267.0" layoutY="350.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_inwersji" layoutX="266.0" layoutY="390.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField editable="false" layoutX="18.0" layoutY="110.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Dokładność" />
-            <TextField editable="false" layoutX="18.0" layoutY="230.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość najlepszych do reprodukcji" />
+            <TextField editable="false" layoutX="18.0" layoutY="230.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Procent najlepszych do reprodukcji" />
             <TextField editable="false" layoutX="18.0" layoutY="150.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość populacji" />
             <TextField editable="false" layoutX="18.0" layoutY="270.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilośc strategji elitarnej" />
             <TextField editable="false" layoutX="18.0" layoutY="190.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość epok" />

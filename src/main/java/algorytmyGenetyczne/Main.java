@@ -6,11 +6,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -38,14 +36,14 @@ public class Main extends Application {
         TextField iloscPopulacjiForm = (TextField) scene.lookup("#ilosc_populacji");
         TextField dokladnoscForm = (TextField) scene.lookup("#dokladnosc");
         TextField iloscEpokForm = (TextField) scene.lookup("#ilosc_epok");
-        TextField iloscNajlepszychForm = (TextField) scene.lookup("#ilosc_najlepszych");
+        TextField procentNajlepszychForm = (TextField) scene.lookup("#ilosc_najlepszych");
         TextField iloscStrategiiElitarnejForm = (TextField) scene.lookup("#ilosc_strategii_elitarnej");
         TextField prawdopodobienstwoKrzyzowaniaForm = (TextField) scene.lookup("#prawdopodobienstwo_krzyzowania");
         TextField prawdopodobienstwoMutacjiForm = (TextField) scene.lookup("#prawdopodobienstwo_mutacji");
         TextField prawdopodobienstwoInwersjiForm = (TextField) scene.lookup("#prawdopodobienstwo_inwersji");
         Text info = (Text) scene.lookup("#info");
 
-        metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(2));
+        metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(1));
         metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
         metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
         rodzajOptymalizacjiForm.setValue(rodzajOptymalizacjiForm.getItems().get(0));
@@ -56,7 +54,7 @@ public class Main extends Application {
         dokladnoscForm.setText("4");
         iloscPopulacjiForm.setText("100");
         iloscEpokForm.setText("50");
-        iloscNajlepszychForm.setText("30");
+        procentNajlepszychForm.setText("0.3");
         iloscStrategiiElitarnejForm.setText("2");
         prawdopodobienstwoKrzyzowaniaForm.setText("0.7");
         prawdopodobienstwoMutacjiForm.setText("0.1");
@@ -76,17 +74,13 @@ public class Main extends Application {
                     Integer iloscPopulacji = Integer.parseInt(iloscPopulacjiForm.getText());
                     Integer dokladnosc = Integer.parseInt(dokladnoscForm.getText());
                     Integer iloscEpok = Integer.parseInt(iloscEpokForm.getText());
-                    Integer iloscNajlepszych = Integer.parseInt(iloscNajlepszychForm.getText());
+                    Double procentNajlepszych = Double.parseDouble(procentNajlepszychForm.getText());
                     Integer iloscStrategiiElitarnej = Integer.parseInt(iloscStrategiiElitarnejForm.getText());
                     iloscStrategiiElitarnej += iloscStrategiiElitarnej%2 == 1 ? 1 : 0;
                     Double prawdopodobienstwoKrzyzowania = Double.parseDouble(prawdopodobienstwoKrzyzowaniaForm.getText());
                     Double prawdopodobienstwoMutacji = Double.parseDouble(prawdopodobienstwoMutacjiForm.getText());
                     Double prawdopodobienstwoInwersji = Double.parseDouble(prawdopodobienstwoInwersjiForm.getText());
                     Boolean maksymalizacja = rodzajOptymalizacjiForm.getValue().toString().equals("Maksymalizacja");
-
-                    start.setText("W trakcie wykonywania ...");
-                    start.setStyle("-fx-font-size:16; -fx-background-color: #7f7fd7; -fx-text-fill: #fff");
-                    start.setDisable(true);
 
                     long startTime = System.currentTimeMillis();
 
@@ -101,7 +95,7 @@ public class Main extends Application {
                             iloscPopulacji,
                             dokladnosc,
                             iloscEpok,
-                            iloscNajlepszych,
+                            procentNajlepszych,
                             iloscStrategiiElitarnej,
                             prawdopodobienstwoKrzyzowania,
                             prawdopodobienstwoMutacji,
@@ -112,13 +106,10 @@ public class Main extends Application {
 
                     long endTime = System.currentTimeMillis();
 
-                    NumberFormat formatter = new DecimalFormat("#0.00000");
+                    NumberFormat formatter = new DecimalFormat("#0.000");
                     String time = formatter.format((endTime - startTime) / 1000d);
-                    info.setText("Czas wykonania algorytmu: " + time + " seconds");
+                    info.setText("Czas wykonania algorytmu: " + time + " sekund");
                     info.setVisible(true);
-                    start.setText("START");
-                    start.setStyle("-fx-font-size:48; -fx-background-color: #1e1e9c; -fx-text-fill: #fff");
-                    start.setDisable(false);
 
                 } catch (Exception exception) {
                     exception.printStackTrace();

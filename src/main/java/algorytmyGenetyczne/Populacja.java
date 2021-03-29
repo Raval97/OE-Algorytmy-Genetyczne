@@ -1,5 +1,7 @@
 package algorytmyGenetyczne;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,14 +18,17 @@ public class Populacja {
             osobnicy.add(new Osobnik(zakresy, dokladnosc));
     }
 
-    public double obliczSredniaFunkcjePrzystsowania(){
+    public double obliczSredniaFunkcjePrzystsowania(int dokladnosc){
         this.osobnicy.forEach(Osobnik::obliczWartoscFunkcjiPrzystsowania);
-        double sum = osobnicy.stream().map(x -> x.wartoscFunkcjiPrzystsowania).reduce(0D, Double::sum);
-        return sum/wielkoscPopulacji;
+        double suma = osobnicy.stream().map(x -> x.wartoscFunkcjiPrzystsowania).reduce(0D, Double::sum);
+        Double srednia = BigDecimal.valueOf(suma/wielkoscPopulacji).setScale(dokladnosc, RoundingMode.HALF_UP).doubleValue();
+        return srednia;
     }
 
-    public Osobnik najlepszyOsobnik(){
+    public Osobnik najlepszyOsobnik(boolean czyMaksymalizacja){
         Collections.sort(this.osobnicy);
+        if(czyMaksymalizacja)
+            Collections.reverse(this.osobnicy);
         return this.osobnicy.get(0);
     }
 

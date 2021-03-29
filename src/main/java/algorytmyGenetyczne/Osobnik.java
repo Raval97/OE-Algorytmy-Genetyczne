@@ -23,7 +23,7 @@ public class Osobnik implements Comparable {
     }
 
     public void obliczWartoscFunkcjiPrzystsowania() {
-        wartoscFunkcjiPrzystsowania = Algorytm.funkcjaPrzystosowania(
+        wartoscFunkcjiPrzystsowania = Algorytm.funkcjaDoOptymalizacji(
                 chromosomy.get(0).dekodowanieDziesietne(),
                 chromosomy.get(1).dekodowanieDziesietne()
         );
