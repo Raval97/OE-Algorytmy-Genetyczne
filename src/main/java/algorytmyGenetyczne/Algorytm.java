@@ -1,6 +1,30 @@
 package algorytmyGenetyczne;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.util.List;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.xy.IntervalXYDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class Algorytm {
 
@@ -52,9 +76,9 @@ public class Algorytm {
         return value;
     }
 
-// #####################################################################################
-// ###############################  SELEKCJA  ##########################################
-// #####################################################################################
+    // #####################################################################################
+    // ###############################  SELEKCJA  ##########################################
+    // #####################################################################################
     private List<Osobnik> selekcja(String rodzaj, List<Osobnik> osobnicy, Double iloscNajlepszych, boolean maksymalizacja) {
         int rozmiar = (int) (wielkoscPopulacji * iloscNajlepszych);
         switch (rodzaj) {
@@ -69,7 +93,7 @@ public class Algorytm {
 
     private List<Osobnik> selekcjaNajlepszych(List<Osobnik> osobnicy, int rozmiar, boolean maksymalizacja) {
         Collections.sort(osobnicy);
-        if(maksymalizacja)
+        if (maksymalizacja)
             Collections.reverse(osobnicy);
         List<Osobnik> osobnicyDoReprodukcji = new ArrayList<>();
         for (int i = 0; i < rozmiar; i++)
@@ -83,13 +107,13 @@ public class Algorytm {
         List<List<Osobnik>> listaTurniejow = new ArrayList<>();
         double sredniaDlugoscGrupy = (double) osobnicy.size() / rozmiar;
         double temp = 0;
-        while (temp < osobnicy.size()-1){
-            listaTurniejow.add(osobnicy.subList((int)temp, (int) (temp+sredniaDlugoscGrupy)));
+        while (temp < osobnicy.size() - 1) {
+            listaTurniejow.add(osobnicy.subList((int) temp, (int) (temp + sredniaDlugoscGrupy)));
             temp += sredniaDlugoscGrupy;
         }
         listaTurniejow.forEach(turniej -> {
             Collections.sort(turniej);
-            if(maksymalizacja)
+            if (maksymalizacja)
                 Collections.reverse(turniej);
             osobnicyDoReprodukcji.add(turniej.get(0));
         });
@@ -101,14 +125,14 @@ public class Algorytm {
         double sumaFx = 0;
         double sumaCzesciowa = 0;
         double przeskalowanie = osobnicy.get(0).wartoscFunkcjiPrzystsowania + 1;
-        if(maksymalizacja){
+        if (maksymalizacja) {
             for (int i = 0; i < wielkoscPopulacji; i++)
                 sumaFx += osobnicy.get(i).wartoscFunkcjiPrzystsowania + przeskalowanie;
-            while (osobnicyDoReprodukcji.size()<rozmiar) {
-                int rand = random.nextInt((int)sumaFx);
-                for (int i = wielkoscPopulacji-1; i >=0 ; i--) {
+            while (osobnicyDoReprodukcji.size() < rozmiar) {
+                int rand = random.nextInt((int) sumaFx);
+                for (int i = wielkoscPopulacji - 1; i >= 0; i--) {
                     sumaCzesciowa += (osobnicy.get(i).wartoscFunkcjiPrzystsowania + przeskalowanie);
-                    if (sumaCzesciowa >= rand && !osobnicyDoReprodukcji.contains(osobnicy.get(i))){
+                    if (sumaCzesciowa >= rand && !osobnicyDoReprodukcji.contains(osobnicy.get(i))) {
                         osobnicyDoReprodukcji.add(osobnicy.get(i));
                         sumaCzesciowa = 0;
                         break;
@@ -118,7 +142,7 @@ public class Algorytm {
         } else {
             for (int i = 0; i < wielkoscPopulacji; i++)
                 sumaFx += 1 / (osobnicy.get(i).wartoscFunkcjiPrzystsowania + przeskalowanie);
-            while (osobnicyDoReprodukcji.size()<rozmiar) {
+            while (osobnicyDoReprodukcji.size() < rozmiar) {
                 double rand = random.nextDouble();
                 for (int i = 0; i < wielkoscPopulacji; i++) {
                     sumaCzesciowa += (1 / (osobnicy.get(i).wartoscFunkcjiPrzystsowania + przeskalowanie)) / sumaFx;
@@ -133,9 +157,9 @@ public class Algorytm {
         return osobnicyDoReprodukcji;
     }
 
-// #####################################################################################
-// ###############################  KRZYZOWANIE  #######################################
-// #####################################################################################
+    // #####################################################################################
+    // ###############################  KRZYZOWANIE  #######################################
+    // #####################################################################################
     private List<Osobnik> krzyzowanie(String rodzaj, List<Osobnik> osobnicyDoGeneracji, Double prawdopodobienstwo, int dlugosc) {
         List<Osobnik> nowaGeneracja = new ArrayList<>();
         while (nowaGeneracja.size() < dlugosc) {
@@ -298,11 +322,10 @@ public class Algorytm {
         for (int i = 0; i < dlugoscChromosomu; i++)
             wzorzec.add(Math.abs(random.nextInt() % 2));
         for (int i = 0; i < dlugoscChromosomu; i++) {
-            if(wzorzec.get(i) == 1){
+            if (wzorzec.get(i) == 1) {
                 dziecko1.add(rodzic2.geny.get(i));
                 dziecko2.add(rodzic1.geny.get(i));
-            }
-            else {
+            } else {
                 dziecko1.add(rodzic1.geny.get(i));
                 dziecko2.add(rodzic2.geny.get(i));
             }
@@ -316,9 +339,9 @@ public class Algorytm {
         return dzieci;
     }
 
-// #####################################################################################
-// ###############################  MUTACJA  ###########################################
-// #####################################################################################
+    // #####################################################################################
+    // ###############################  MUTACJA  ###########################################
+    // #####################################################################################
     private Osobnik mutacja(String rodzaj, Osobnik osobnik, Double prawdopodobienstwo) {
         if (prawdopodobienstwo >= random.nextDouble()) {
             switch (rodzaj) {
@@ -336,7 +359,7 @@ public class Algorytm {
         return osobnik;
     }
 
-    private Osobnik mutacjaJednopunktowa(Osobnik osobnik){
+    private Osobnik mutacjaJednopunktowa(Osobnik osobnik) {
         Double rand = random.nextDouble();
         int locusX1 = (int) ((double) osobnik.chromosomy.get(0).dlugosc * rand);
         int locusX2 = (int) ((double) osobnik.chromosomy.get(1).dlugosc * rand);
@@ -345,7 +368,7 @@ public class Algorytm {
         return osobnik;
     }
 
-    private Osobnik mutacjaDwupunktowa(Osobnik osobnik){
+    private Osobnik mutacjaDwupunktowa(Osobnik osobnik) {
         Double rand = random.nextDouble();
         int locusX1_1 = (int) ((double) osobnik.chromosomy.get(0).dlugosc * rand);
         int locusX1_2 = (int) ((double) osobnik.chromosomy.get(0).dlugosc * rand);
@@ -358,9 +381,9 @@ public class Algorytm {
         return osobnik;
     }
 
-    private Osobnik mutacjaBrzegowa(Osobnik osobnik){
+    private Osobnik mutacjaBrzegowa(Osobnik osobnik) {
         Double rand = random.nextDouble();
-        if(rand > 0.5) {
+        if (rand > 0.5) {
             osobnik.chromosomy.get(0).geny.set(0, osobnik.chromosomy.get(0).geny.get(0) == 1 ? 1 : 0);
             osobnik.chromosomy.get(1).geny.set(0, osobnik.chromosomy.get(1).geny.get(0) == 1 ? 1 : 0);
         } else {
@@ -371,12 +394,12 @@ public class Algorytm {
         return osobnik;
     }
 
-// #####################################################################################
-// ###############################  INWERSJA  ##########################################
-// #####################################################################################
-    private Osobnik inwersja(Osobnik osobnik, Double prawdopodobienstwo){
+    // #####################################################################################
+    // ###############################  INWERSJA  ##########################################
+    // #####################################################################################
+    private Osobnik inwersja(Osobnik osobnik, Double prawdopodobienstwo) {
         if (prawdopodobienstwo >= random.nextDouble())
-            osobnik.chromosomy.replaceAll(chr ->  inwersjaChromosomu(chr));
+            osobnik.chromosomy.replaceAll(chr -> inwersjaChromosomu(chr));
         return osobnik;
     }
 
@@ -390,17 +413,23 @@ public class Algorytm {
         return chromosom;
     }
 
-    public void oblicz() {
+    public Long oblicz() throws IOException {
 
+        long startTime = System.currentTimeMillis();
         ZakresZmiennej[] zakresyZmiennych = {
                 new ZakresZmiennej(poczatekZakresuX1, koniecZakresuX1),
                 new ZakresZmiennej(poczatekZakresuX2, koniecZakresuX2)};
         Populacja populacja = new Populacja(wielkoscPopulacji, zakresyZmiennych, dokladnosc);
-        List<Osobnik> osobnicyDoreprodukcji = new ArrayList<>();
-        List<Osobnik> osobnicyOpercajeGenetyczne = new ArrayList<>();
+        List<Osobnik> osobnicyDoreprodukcji;
+        List<Osobnik> osobnicyOpercajeGenetyczne;
+        List<String> wynikiAlgorytmu = new ArrayList<>();
+        List<Double> fx_populacji = new ArrayList<>();
+        List<Double> odchylenieStandardowe = new ArrayList<>();
 
-//        System.out.print(populacja.toString());
-        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania(5)+" \n");
+        fx_populacji.add(populacja.obliczSredniaFunkcjePrzystsowania(5));
+        wynikiAlgorytmu.add("EPOKA 0\tfx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5)
+                + "\t\tnajlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
+        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + " \n");
 
         for (int i = 0; i < iloscEpok; i++) {
             osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, procentNajlepszych, maksymalizacja);
@@ -409,11 +438,100 @@ public class Algorytm {
             osobnicyOpercajeGenetyczne.replaceAll(o -> inwersja(o, prawdopodobienstwoMutacji));
             populacja.osobnicy.removeAll(populacja.osobnicy.subList(iloscStrategiiElitarnej, populacja.wielkoscPopulacji));
             populacja.osobnicy.addAll(osobnicyOpercajeGenetyczne);
-            System.out.print("epoka  " + (i+1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + "\t\t");
+
+            fx_populacji.add(populacja.obliczSredniaFunkcjePrzystsowania(5));
+            odchylenieStandardowe.add(liczOdchylenie(populacja.osobnicy, fx_populacji.get(fx_populacji.size()-1)));
+            wynikiAlgorytmu.add("epoka " + (i + 1) + " \tfx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5)
+                    + "\t\tnajlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
+            System.out.print("epoka  " + (i + 1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + "\t\t");
             System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania);
-//            System.out.println("najlepszy_osobnik: " + populacja.najlepszyOsobnik(maksymalizacja).toString());
         }
 
+        long endTime = System.currentTimeMillis();
+        String nazwaFolderu = System.getProperty("user.dir") + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-d-HH:mm:ss_")) + random.nextInt(10);
+        File theDir = new File( nazwaFolderu);
+        theDir.mkdirs();
+        zapiszWynikDoPliku(wynikiAlgorytmu, nazwaFolderu+"/wynik.txt");
+        rysuj2(fx_populacji, nazwaFolderu, "Średnia", "Funkcja Przystosowania");
+        rysuj2(odchylenieStandardowe, nazwaFolderu, "Odchylenie", "Srednie odchylenie standardowe");
+
+        return endTime - startTime;
+
     }
+
+//    private  void  rys(List<Double> lista) throws IOException {
+//
+//
+//        IntervalXYDataset dataset = new HistogramDataset();
+//
+//        double values =
+//
+//        Double[] array = new Double[lista.size()];
+//        lista.toArray(array); // fill the array
+////        double[] strings = lista.toArray(Double[]::new);
+//
+//        ((HistogramDataset) dataset).addSeries("key", ArrayUtils.toPrimitive(array), 50);
+//
+//        JFreeChart histogram = ChartFactory.createHistogram("Normal distribution",
+//                "y values", "x values", dataset, PlotOrientation.VERTICAL, true, false, false);
+//
+//        ChartUtilities.saveChartAsPNG(new File("histogram.png"), histogram, 450, 400);
+//    }
+
+    private void rysuj2(List<Double> lista, String path, String nazwa, String yTittle){
+
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        XYSeries data = new XYSeries("wartosc");
+        for (int i = 0; i <lista.size() ; i++)
+            data.add(Double.valueOf(i), lista.get(i));
+        dataset.addSeries(data);
+
+        SwingUtilities.invokeLater(() -> {
+            LineChartExample example = null;
+            try {
+                example = new LineChartExample(path, nazwa, yTittle, dataset);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            example.setAlwaysOnTop(true);
+            example.pack();
+            example.setSize(800, 400);
+            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            example.setVisible(true);
+
+
+
+        });
+
+
+    }
+
+    private double liczOdchylenie(List<Osobnik> osobnicy, double sredniaPopulacji){
+        double suma = 0;
+        for (int i = 0; i < osobnicy.size(); i++)
+            suma += Math.pow((osobnicy.get(i).wartoscFunkcjiPrzystsowania - sredniaPopulacji),2);
+        return Math.pow((suma/osobnicy.size()),0.5);
+    }
+
+    private void zapiszWynikDoPliku(List<String> wynikiAlgorytmu, String plik) {
+        try {
+            File myObj = new File(plik);
+            myObj.createNewFile();
+            FileWriter myWriter = new FileWriter(plik);
+            wynikiAlgorytmu.forEach(wynik -> {
+                try {
+                    myWriter.write(wynik);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            myWriter.close();
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
 
 }

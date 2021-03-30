@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage stage) throws Exception {
         Pane mainPane = FXMLLoader.load(getClass().getResource("/ManView.fxml"));
@@ -82,8 +83,6 @@ public class Main extends Application {
                     Double prawdopodobienstwoInwersji = Double.parseDouble(prawdopodobienstwoInwersjiForm.getText());
                     Boolean maksymalizacja = rodzajOptymalizacjiForm.getValue().toString().equals("Maksymalizacja");
 
-                    long startTime = System.currentTimeMillis();
-
                     Algorytm algorytm = new Algorytm(
                             metodaSelekcji,
                             metodaKrzyzowania,
@@ -102,14 +101,13 @@ public class Main extends Application {
                             prawdopodobienstwoInwersji,
                             maksymalizacja
                     );
-                    algorytm.oblicz();
-
-                    long endTime = System.currentTimeMillis();
+                    long duration = algorytm.oblicz();
 
                     NumberFormat formatter = new DecimalFormat("#0.000");
-                    String time = formatter.format((endTime - startTime) / 1000d);
+                    String time = formatter.format(duration / 1000d);
                     info.setText("Czas wykonania algorytmu: " + time + " sekund");
                     info.setVisible(true);
+
 
                 } catch (Exception exception) {
                     exception.printStackTrace();

@@ -72,18 +72,18 @@
             <TextField fx:id="prawdopodobienstwo_krzyzowania" layoutX="266.0" layoutY="310.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_mutacji" layoutX="267.0" layoutY="350.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
             <TextField fx:id="prawdopodobienstwo_inwersji" layoutX="266.0" layoutY="390.0" prefHeight="26.0" prefWidth="68.0" promptText="\%" style="-fx-background-color: gray; -fx-text-fill: #fff" />
-            <TextField editable="false" layoutX="18.0" layoutY="110.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Dokładność" />
-            <TextField editable="false" layoutX="18.0" layoutY="230.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Procent najlepszych do reprodukcji" />
-            <TextField editable="false" layoutX="18.0" layoutY="150.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość populacji" />
-            <TextField editable="false" layoutX="18.0" layoutY="270.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilośc strategji elitarnej" />
-            <TextField editable="false" layoutX="18.0" layoutY="190.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość epok" />
-            <TextField editable="false" layoutX="18.0" layoutY="310.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Prawdopodobieństwo krzyżowania" />
-            <TextField editable="false" layoutX="18.0" layoutY="350.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Prawdopodbienstwo mutacji" />
-            <TextField editable="false" layoutX="18.0" layoutY="390.0" prefHeight="26.0" prefWidth="240.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Prawdopodobieństwo inwersji" />
-            <TextField editable="false" layoutX="18.0" layoutY="31.0" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Zakres Zmiennej X1: od" />
+            <TextField editable="false" layoutX="12.0" layoutY="110.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Dokładność" />
+            <TextField editable="false" layoutX="12.0" layoutY="230.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Procent najlepszych do reprodukcji" />
+            <TextField editable="false" layoutX="12.0" layoutY="150.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość populacji" />
+            <TextField editable="false" layoutX="12.0" layoutY="270.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilośc strategji elitarnej" />
+            <TextField editable="false" layoutX="12.0" layoutY="190.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Ilość epok" />
+            <TextField editable="false" layoutX="12.0" layoutY="310.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Prawdopodobieństwo krzyżowania" />
+            <TextField editable="false" layoutX="12.0" layoutY="350.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Prawdopodbienstwo mutacji" />
+            <TextField editable="false" layoutX="12.0" layoutY="390.0" prefHeight="26.0" prefWidth="246.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Prawdopodobieństwo inwersji" />
+            <TextField editable="false" layoutX="11.0" layoutY="31.0" prefHeight="26.0" prefWidth="181.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Zakres Zmiennej X1: od" />
             <TextField editable="false" layoutX="247.0" layoutY="30.0" prefHeight="26.0" prefWidth="34.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="do" />
             <TextField editable="false" layoutX="247.0" layoutY="70.0" prefHeight="26.0" prefWidth="34.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="do" />
-            <TextField editable="false" layoutX="18.0" layoutY="70.0" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Zakres Zmiennej X2: od" />
+            <TextField editable="false" layoutX="11.0" layoutY="70.0" prefHeight="26.0" prefWidth="181.0" style="-fx-background-color: #cf7edc#cf7edc; -fx-text-fill: #fff;" text="Zakres Zmiennej X2: od" />
       </children>
       </Pane>
       <Text fill="#70cd45" layoutX="177.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algorytm Gentyczny">

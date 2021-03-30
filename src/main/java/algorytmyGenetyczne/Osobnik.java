@@ -19,7 +19,7 @@ public class Osobnik implements Comparable {
     }
 
     public Osobnik(Chromosom chromosomyX1, Chromosom chromosomyX2) {
-        this.chromosomy = (List<Chromosom>) Arrays.asList(chromosomyX1, chromosomyX2);
+        this.chromosomy = Arrays.asList(chromosomyX1, chromosomyX2);
     }
 
     public void obliczWartoscFunkcjiPrzystsowania() {
