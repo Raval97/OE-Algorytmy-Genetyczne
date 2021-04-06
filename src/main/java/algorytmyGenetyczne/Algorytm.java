@@ -1,10 +1,6 @@
 package algorytmyGenetyczne;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -13,16 +9,6 @@ import java.io.IOException;
 import java.io.FileWriter;
 import java.util.List;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.xy.IntervalXYDataset;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -170,8 +156,8 @@ public class Algorytm {
             Osobnik rodzic1 = osobnicyDoGeneracji.get(randInt1);
             Osobnik rodzic2 = osobnicyDoGeneracji.get(randInt2);
             if (prawdopodobienstwo >= random.nextDouble()) {
-                List<List<Integer>> x1 = new ArrayList<>(new ArrayList<>());
-                List<List<Integer>> x2 = new ArrayList<>(new ArrayList<>());
+                List<List<Integer>> x1;
+                List<List<Integer>> x2;
                 switch (rodzaj) {
                     case "Krzyżowanie Jednopunkowe":
                         x1 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
@@ -296,19 +282,6 @@ public class Algorytm {
         dziecko2.addAll(dziecko2_4);
 
         dzieci.addAll(Arrays.asList(dziecko1, dziecko2));
-//        System.out.println();
-//        System.out.println(locus1 + " " + locus2 + " " + locus3);
-//        System.out.println(rodzic1 + "\n" + rodzic2);
-//        dziecko1_1.forEach(e -> System.out.print(e)); System.out.print("-");
-//        dziecko1_2.forEach(e -> System.out.print(e)); System.out.print("-");
-//        dziecko1_3.forEach(e -> System.out.print(e)); System.out.print("-");
-//        dziecko1_4.forEach(e -> System.out.print(e)); System.out.println();
-//        dziecko1.forEach(e -> System.out.print(e)); System.out.println();
-//        dziecko2_1.forEach(e -> System.out.print(e)); System.out.print("-");
-//        dziecko2_2.forEach(e -> System.out.print(e)); System.out.print("-");
-//        dziecko2_3.forEach(e -> System.out.print(e)); System.out.print("-");
-//        dziecko2_4.forEach(e -> System.out.print(e)); System.out.println();
-//        dziecko2.forEach(e -> System.out.print(e)); System.out.println();
         return dzieci;
     }
 
@@ -331,11 +304,6 @@ public class Algorytm {
             }
         }
         dzieci.addAll(Arrays.asList(dziecko1, dziecko2));
-//        System.out.println("r1: " + rodzic1 + "\nr2: " + rodzic2 + "\nwz: " + wzorzec);
-//        System.out.print("d1: ");
-//        dziecko1.forEach(e -> System.out.print(e)); System.out.println();
-//        System.out.print("d2: ");
-//        dziecko2.forEach(e -> System.out.print(e)); System.out.println();
         return dzieci;
     }
 
@@ -448,62 +416,39 @@ public class Algorytm {
         }
 
         long endTime = System.currentTimeMillis();
-        String nazwaFolderu = System.getProperty("user.dir") + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-d-HH:mm:ss_")) + random.nextInt(10);
+
+//        String nazwaFolderu = System.getProperty("user.dir") + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-d-HH:mm:ss_")) + random.nextInt(10);
+        String nazwaFolderu = System.getProperty("user.dir") + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH.mm.ss_")) + random.nextInt(10);
         File theDir = new File( nazwaFolderu);
         theDir.mkdirs();
         zapiszWynikDoPliku(wynikiAlgorytmu, nazwaFolderu+"/wynik.txt");
-        rysuj2(fx_populacji, nazwaFolderu, "Średnia", "Funkcja Przystosowania");
-        rysuj2(odchylenieStandardowe, nazwaFolderu, "Odchylenie", "Srednie odchylenie standardowe");
+        rysujWykres(fx_populacji, nazwaFolderu, "Średnia", "Funkcja Przystosowania");
+        rysujWykres(odchylenieStandardowe, nazwaFolderu, "Odchylenie", "Srednie odchylenie standardowe");
 
         return endTime - startTime;
 
     }
 
-//    private  void  rys(List<Double> lista) throws IOException {
-//
-//
-//        IntervalXYDataset dataset = new HistogramDataset();
-//
-//        double values =
-//
-//        Double[] array = new Double[lista.size()];
-//        lista.toArray(array); // fill the array
-////        double[] strings = lista.toArray(Double[]::new);
-//
-//        ((HistogramDataset) dataset).addSeries("key", ArrayUtils.toPrimitive(array), 50);
-//
-//        JFreeChart histogram = ChartFactory.createHistogram("Normal distribution",
-//                "y values", "x values", dataset, PlotOrientation.VERTICAL, true, false, false);
-//
-//        ChartUtilities.saveChartAsPNG(new File("histogram.png"), histogram, 450, 400);
-//    }
-
-    private void rysuj2(List<Double> lista, String path, String nazwa, String yTittle){
+    private void rysujWykres(List<Double> lista, String path, String nazwa, String yTittle){
 
         XYSeriesCollection dataset = new XYSeriesCollection();
         XYSeries data = new XYSeries("wartosc");
         for (int i = 0; i <lista.size() ; i++)
             data.add(Double.valueOf(i), lista.get(i));
         dataset.addSeries(data);
-
         SwingUtilities.invokeLater(() -> {
-            LineChartExample example = null;
+            WykresFactory example = null;
             try {
-                example = new LineChartExample(path, nazwa, yTittle, dataset);
+                example = new WykresFactory(path, nazwa, yTittle, dataset);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             example.setAlwaysOnTop(true);
             example.pack();
             example.setSize(800, 400);
-            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            example.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             example.setVisible(true);
-
-
-
         });
-
-
     }
 
     private double liczOdchylenie(List<Osobnik> osobnicy, double sredniaPopulacji){
