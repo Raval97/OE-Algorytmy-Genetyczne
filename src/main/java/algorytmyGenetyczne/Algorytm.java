@@ -397,7 +397,7 @@ public class Algorytm {
         fx_populacji.add(populacja.obliczSredniaFunkcjePrzystsowania(5));
         wynikiAlgorytmu.add("EPOKA 0\tfx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5)
                 + "\t\tnajlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
-        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + " \n");
+//        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + " \n");
 
         for (int i = 0; i < iloscEpok; i++) {
             osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, procentNajlepszych, maksymalizacja);
@@ -408,16 +408,15 @@ public class Algorytm {
             populacja.osobnicy.addAll(osobnicyOpercajeGenetyczne);
 
             fx_populacji.add(populacja.obliczSredniaFunkcjePrzystsowania(5));
-            odchylenieStandardowe.add(liczOdchylenie(populacja.osobnicy, fx_populacji.get(fx_populacji.size()-1)));
+            odchylenieStandardowe.add(populacja.liczOdchylenie());
             wynikiAlgorytmu.add("epoka " + (i + 1) + " \tfx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5)
                     + "\t\tnajlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
-            System.out.print("epoka  " + (i + 1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + "\t\t");
-            System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania);
+//            System.out.print("epoka  " + (i + 1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + "\t\t");
+//            System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania);
         }
 
         long endTime = System.currentTimeMillis();
 
-//        String nazwaFolderu = System.getProperty("user.dir") + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-d-HH:mm:ss_")) + random.nextInt(10);
         String nazwaFolderu = System.getProperty("user.dir") + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH.mm.ss_")) + random.nextInt(10);
         File theDir = new File( nazwaFolderu);
         theDir.mkdirs();
@@ -430,7 +429,6 @@ public class Algorytm {
     }
 
     private void rysujWykres(List<Double> lista, String path, String nazwa, String yTittle){
-
         XYSeriesCollection dataset = new XYSeriesCollection();
         XYSeries data = new XYSeries("wartosc");
         for (int i = 0; i <lista.size() ; i++)
@@ -451,13 +449,6 @@ public class Algorytm {
         });
     }
 
-    private double liczOdchylenie(List<Osobnik> osobnicy, double sredniaPopulacji){
-        double suma = 0;
-        for (int i = 0; i < osobnicy.size(); i++)
-            suma += Math.pow((osobnicy.get(i).wartoscFunkcjiPrzystsowania - sredniaPopulacji),2);
-        return Math.pow((suma/osobnicy.size()),0.5);
-    }
-
     private void zapiszWynikDoPliku(List<String> wynikiAlgorytmu, String plik) {
         try {
             File myObj = new File(plik);
@@ -471,7 +462,6 @@ public class Algorytm {
                 }
             });
             myWriter.close();
-
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

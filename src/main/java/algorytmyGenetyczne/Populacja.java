@@ -10,6 +10,7 @@ public class Populacja {
 
     List<Osobnik> osobnicy;
     int wielkoscPopulacji;
+    double sredniaFunkcjaPrzystosowania;
 
     public Populacja(int wielkoscPopulacji, ZakresZmiennej[] zakresy, int dokladnosc) {
         this.wielkoscPopulacji = wielkoscPopulacji;
@@ -22,6 +23,7 @@ public class Populacja {
         this.osobnicy.forEach(Osobnik::obliczWartoscFunkcjiPrzystsowania);
         double suma = osobnicy.stream().map(x -> x.wartoscFunkcjiPrzystsowania).reduce(0D, Double::sum);
         Double srednia = BigDecimal.valueOf(suma/wielkoscPopulacji).setScale(dokladnosc, RoundingMode.HALF_UP).doubleValue();
+        sredniaFunkcjaPrzystosowania = srednia;
         return srednia;
     }
 
@@ -30,6 +32,13 @@ public class Populacja {
         if(czyMaksymalizacja)
             Collections.reverse(this.osobnicy);
         return this.osobnicy.get(0);
+    }
+
+    public double liczOdchylenie(){
+        double suma = 0;
+        for (int i = 0; i < osobnicy.size(); i++)
+            suma += Math.pow((osobnicy.get(i).wartoscFunkcjiPrzystsowania - sredniaFunkcjaPrzystosowania),2);
+        return Math.pow((suma/osobnicy.size()),0.5);
     }
 
     @Override
