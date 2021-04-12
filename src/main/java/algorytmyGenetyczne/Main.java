@@ -1,6 +1,11 @@
 package algorytmyGenetyczne;
 
 import javafx.application.Application;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableArrayBase;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +22,26 @@ import java.text.NumberFormat;
 
 public class Main extends Application {
 
+    Button start;
+    ComboBox reprezentacjaChromosomuForm;
+    ComboBox metodaSelekcjiForm;
+    ComboBox metodaKrzyzowaniaForm;
+    ComboBox metodaMutacjiForm;
+    ComboBox rodzajOptymalizacjiForm;
+    TextField poczatekZakresuX1Form;
+    TextField koniecZakresuX1Form;
+    TextField poczatekZakresuX2Form;
+    TextField koniecZakresuX2Form;
+    TextField iloscPopulacjiForm;
+    TextField dokladnoscForm;
+    TextField iloscEpokForm;
+    TextField procentNajlepszychForm;
+    TextField iloscStrategiiElitarnejForm;
+    TextField prawdopodobienstwoKrzyzowaniaForm;
+    TextField prawdopodobienstwoMutacjiForm;
+    TextField prawdopodobienstwoInwersjiForm;
+    Text info;
+
     @Override
     public void start(Stage stage) throws Exception {
         Pane mainPane = FXMLLoader.load(getClass().getResource("/ManView.fxml"));
@@ -25,46 +50,67 @@ public class Main extends Application {
         stage.setTitle("Algorytmy Genetyczne");
         stage.show();
 
-        Button start = (Button) scene.lookup("#start");
-        ComboBox metodaSelekcjiForm = (ComboBox) scene.lookup("#metoda_selekcji");
-        ComboBox metodaKrzyzowaniaForm = (ComboBox) scene.lookup("#metoda_krzyzowania");
-        ComboBox metodaMutacjiForm = (ComboBox) scene.lookup("#metoda_mutacji");
-        ComboBox rodzajOptymalizacjiForm = (ComboBox) scene.lookup("#rodzaj_optymalizacji");
-        TextField poczatekZakresuX1Form = (TextField) scene.lookup("#poczatek_zakresu_x1");
-        TextField koniecZakresuX1Form = (TextField) scene.lookup("#koniec_zakresu_x1");
-        TextField poczatekZakresuX2Form = (TextField) scene.lookup("#poczatek_zakresu_x2");
-        TextField koniecZakresuX2Form = (TextField) scene.lookup("#koniec_zakresu_x2");
-        TextField iloscPopulacjiForm = (TextField) scene.lookup("#ilosc_populacji");
-        TextField dokladnoscForm = (TextField) scene.lookup("#dokladnosc");
-        TextField iloscEpokForm = (TextField) scene.lookup("#ilosc_epok");
-        TextField procentNajlepszychForm = (TextField) scene.lookup("#ilosc_najlepszych");
-        TextField iloscStrategiiElitarnejForm = (TextField) scene.lookup("#ilosc_strategii_elitarnej");
-        TextField prawdopodobienstwoKrzyzowaniaForm = (TextField) scene.lookup("#prawdopodobienstwo_krzyzowania");
-        TextField prawdopodobienstwoMutacjiForm = (TextField) scene.lookup("#prawdopodobienstwo_mutacji");
-        TextField prawdopodobienstwoInwersjiForm = (TextField) scene.lookup("#prawdopodobienstwo_inwersji");
-        Text info = (Text) scene.lookup("#info");
+        start = (Button) scene.lookup("#start");
+        reprezentacjaChromosomuForm = (ComboBox) scene.lookup("#reprezentacja_hromosomu");
+        metodaSelekcjiForm = (ComboBox) scene.lookup("#metoda_selekcji");
+        metodaKrzyzowaniaForm = (ComboBox) scene.lookup("#metoda_krzyzowania");
+        metodaMutacjiForm = (ComboBox) scene.lookup("#metoda_mutacji");
+        rodzajOptymalizacjiForm = (ComboBox) scene.lookup("#rodzaj_optymalizacji");
+        poczatekZakresuX1Form = (TextField) scene.lookup("#poczatek_zakresu_x1");
+        koniecZakresuX1Form = (TextField) scene.lookup("#koniec_zakresu_x1");
+        poczatekZakresuX2Form = (TextField) scene.lookup("#poczatek_zakresu_x2");
+        koniecZakresuX2Form = (TextField) scene.lookup("#koniec_zakresu_x2");
+        iloscPopulacjiForm = (TextField) scene.lookup("#ilosc_populacji");
+        dokladnoscForm = (TextField) scene.lookup("#dokladnosc");
+        iloscEpokForm = (TextField) scene.lookup("#ilosc_epok");
+        procentNajlepszychForm = (TextField) scene.lookup("#ilosc_najlepszych");
+        iloscStrategiiElitarnejForm = (TextField) scene.lookup("#ilosc_strategii_elitarnej");
+        prawdopodobienstwoKrzyzowaniaForm = (TextField) scene.lookup("#prawdopodobienstwo_krzyzowania");
+        prawdopodobienstwoMutacjiForm = (TextField) scene.lookup("#prawdopodobienstwo_mutacji");
+        prawdopodobienstwoInwersjiForm = (TextField) scene.lookup("#prawdopodobienstwo_inwersji");
+        TextField prawdopodobienstwoInwersjiText = (TextField) scene.lookup("#prawdopodobienstwo_inwersji_text");
+        info = (Text) scene.lookup("#info");
 
-        metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(1));
-        metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
-        metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
-        rodzajOptymalizacjiForm.setValue(rodzajOptymalizacjiForm.getItems().get(0));
-        poczatekZakresuX1Form.setText("-1.5");
-        koniecZakresuX1Form.setText("4");
-        poczatekZakresuX2Form.setText("-3");
-        koniecZakresuX2Form.setText("4");
-        dokladnoscForm.setText("4");
-        iloscPopulacjiForm.setText("100");
-        iloscEpokForm.setText("50");
-        procentNajlepszychForm.setText("0.3");
-        iloscStrategiiElitarnejForm.setText("2");
-        prawdopodobienstwoKrzyzowaniaForm.setText("0.7");
-        prawdopodobienstwoMutacjiForm.setText("0.1");
-        prawdopodobienstwoInwersjiForm.setText("0.1");
+        ustawWartosciDomyslne();
+        reprezentacjaChromosomuForm.setValue(reprezentacjaChromosomuForm.getItems().get(0));
+
+        reprezentacjaChromosomuForm.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(reprezentacjaChromosomuForm.getValue() == reprezentacjaChromosomuForm.getItems().get(0)){
+                    ObservableList<String> listaMetodKrzyzowania = FXCollections.observableArrayList(
+                            "Krzyżowanie Jednopunkowe", "Krzyzowanie Dwupunktowe",
+                            "Krzyzowanie Trzypunktowe", "Krzyzowanie Jednorodne"
+                    );
+                    ObservableList<String> listaMetodMutacji = FXCollections.observableArrayList(
+                            "Mutacja Jednopunkowa", "Mutacja Dwupunktowa", "Mutacja Brzegowa"
+                    );
+                    metodaKrzyzowaniaForm.setItems(listaMetodKrzyzowania);
+                    metodaMutacjiForm.setItems(listaMetodMutacji);
+                    prawdopodobienstwoInwersjiForm.setOpacity(1);
+                    prawdopodobienstwoInwersjiText.setOpacity(1);
+                    prawdopodobienstwoInwersjiForm.setDisable(false);
+                }
+                else {
+                    ObservableList<String> listaMetodKrzyzowania = FXCollections.observableArrayList(
+                            "Krzyzowanie Arytmetyczne", "Krzyzowanie Heurystyczne"
+                    );
+                    ObservableList<String> listaMetodMutacji = FXCollections.observableArrayList("Mutacja Równomierna");
+                    metodaKrzyzowaniaForm.setItems(listaMetodKrzyzowania);
+                    metodaMutacjiForm.setItems(listaMetodMutacji);
+                    prawdopodobienstwoInwersjiForm.setOpacity(0.5);
+                    prawdopodobienstwoInwersjiText.setOpacity(0.5);
+                    prawdopodobienstwoInwersjiForm.setDisable(true);
+                }
+                ustawWartosciDomyslne();
+            }
+        });
 
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 try {
+                    String reprezentacjaChromosomu = reprezentacjaChromosomuForm.getValue().toString();
                     String metodaSelekcji = metodaSelekcjiForm.getValue().toString();
                     String metodaKrzyzowania = metodaKrzyzowaniaForm.getValue().toString();
                     String metodaMutacji = metodaMutacjiForm.getValue().toString();
@@ -83,7 +129,9 @@ public class Main extends Application {
                     Double prawdopodobienstwoInwersji = Double.parseDouble(prawdopodobienstwoInwersjiForm.getText());
                     Boolean maksymalizacja = rodzajOptymalizacjiForm.getValue().toString().equals("Maksymalizacja");
 
+                    System.out.println(metodaKrzyzowania + " " + metodaMutacji);
                     Algorytm algorytm = new Algorytm(
+                            reprezentacjaChromosomu,
                             metodaSelekcji,
                             metodaKrzyzowania,
                             metodaMutacji,
@@ -117,6 +165,25 @@ public class Main extends Application {
 
             }
         });
+    }
+
+    public void ustawWartosciDomyslne(){
+        metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(1));
+        metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
+        metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
+        rodzajOptymalizacjiForm.setValue(rodzajOptymalizacjiForm.getItems().get(0));
+        poczatekZakresuX1Form.setText("-1.5");
+        koniecZakresuX1Form.setText("4");
+        poczatekZakresuX2Form.setText("-3");
+        koniecZakresuX2Form.setText("4");
+        dokladnoscForm.setText("4");
+        iloscPopulacjiForm.setText("100");
+        iloscEpokForm.setText("50");
+        procentNajlepszychForm.setText("0.3");
+        iloscStrategiiElitarnejForm.setText("2");
+        prawdopodobienstwoKrzyzowaniaForm.setText("0.7");
+        prawdopodobienstwoMutacjiForm.setText("0.1");
+        prawdopodobienstwoInwersjiForm.setText("0.1");
     }
 
     public static void main(String[] args) {

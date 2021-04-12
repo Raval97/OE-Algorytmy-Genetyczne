@@ -1,4 +1,4 @@
-package algorytmyGenetyczne;
+package algorytmyGenetyczne.models;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,15 +8,22 @@ import java.util.List;
 
 public class Populacja {
 
-    List<Osobnik> osobnicy;
-    int wielkoscPopulacji;
-    double sredniaFunkcjaPrzystosowania;
+    public List<Osobnik> osobnicy;
+    public int wielkoscPopulacji;
+    public double sredniaFunkcjaPrzystosowania;
 
     public Populacja(int wielkoscPopulacji, ZakresZmiennej[] zakresy, int dokladnosc) {
         this.wielkoscPopulacji = wielkoscPopulacji;
         osobnicy = new ArrayList<>();
         for (int i = 0; i < this.wielkoscPopulacji; i++)
             osobnicy.add(new Osobnik(zakresy, dokladnosc));
+    }
+
+    public Populacja(int wielkoscPopulacji, ZakresZmiennej[] zakresy) {
+        this.wielkoscPopulacji = wielkoscPopulacji;
+        osobnicy = new ArrayList<>();
+        for (int i = 0; i < this.wielkoscPopulacji; i++)
+            osobnicy.add(new Osobnik(zakresy));
     }
 
     public double obliczSredniaFunkcjePrzystsowania(int dokladnosc){

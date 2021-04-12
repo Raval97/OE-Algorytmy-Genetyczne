@@ -1,8 +1,8 @@
-package algorytmyGenetyczne;
+package algorytmyGenetyczne.models;
 
-class ZakresZmiennej{
-    Double zakresPoczatkowy;
-    Double zakresKoncowy;
+public class ZakresZmiennej{
+    public Double zakresPoczatkowy;
+    public Double zakresKoncowy;
 
     public ZakresZmiennej(Double zakresPoczatkowy, Double zakresKoncowy) {
         this.zakresPoczatkowy = zakresPoczatkowy;

@@ -9,11 +9,16 @@ import java.io.IOException;
 import java.io.FileWriter;
 import java.util.List;
 
+import algorytmyGenetyczne.models.Chromosom;
+import algorytmyGenetyczne.models.Osobnik;
+import algorytmyGenetyczne.models.Populacja;
+import algorytmyGenetyczne.models.ZakresZmiennej;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class Algorytm {
 
+    String reprezentacjaChromosomu;
     String metodaSelekcji;
     String metodaKrzyzowania;
     String metodaMutacji;
@@ -33,11 +38,12 @@ public class Algorytm {
 
     static Random random = new Random();
 
-    public Algorytm(String metodaSelekcji, String metodaKrzyzowania, String metodaMutacji, Double poczatekZakresuX1,
-                    Double koniecZakresuX1, Double poczatekZakresuX2, Double koniecZakresuX2, Integer wielkoscPopulacji,
-                    Integer dokladnosc, Integer iloscEpok, Double procentNajlepszych, Integer iloscStrategiiElitarnej,
-                    Double prawdopodobienstwoKrzyzowania, Double prawdopodobienstwoMutacji,
-                    Double prawdopodobienstwoInwersji, Boolean maksymalizacja) {
+    public Algorytm(String reprezentacjaChromosomu, String metodaSelekcji, String metodaKrzyzowania, String metodaMutacji,
+                    Double poczatekZakresuX1, Double koniecZakresuX1, Double poczatekZakresuX2, Double koniecZakresuX2,
+                    Integer wielkoscPopulacji, Integer dokladnosc, Integer iloscEpok, Double procentNajlepszych,
+                    Integer iloscStrategiiElitarnej, Double prawdopodobienstwoKrzyzowania,
+                    Double prawdopodobienstwoMutacji, Double prawdopodobienstwoInwersji, Boolean maksymalizacja) {
+        this.reprezentacjaChromosomu = reprezentacjaChromosomu;
         this.metodaSelekcji = metodaSelekcji;
         this.metodaKrzyzowania = metodaKrzyzowania;
         this.metodaMutacji = metodaMutacji;
@@ -156,34 +162,51 @@ public class Algorytm {
             Osobnik rodzic1 = osobnicyDoGeneracji.get(randInt1);
             Osobnik rodzic2 = osobnicyDoGeneracji.get(randInt2);
             if (prawdopodobienstwo >= random.nextDouble()) {
-                List<List<Integer>> x1;
-                List<List<Integer>> x2;
-                switch (rodzaj) {
-                    case "Krzyżowanie Jednopunkowe":
-                        x1 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
-                        x2 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
-                        break;
-                    case "Krzyzowanie Dwupunktowe":
-                        x1 = krzyzowanieDwupunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
-                        x2 = krzyzowanieDwupunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
-                        break;
-                    case "Krzyzowanie Trzypunktowe":
-                        x1 = krzyzowanieTrzypunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
-                        x2 = krzyzowanieTrzypunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
-                        break;
-                    default:
-                        x1 = krzyzowanieJednorodne(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
-                        x2 = krzyzowanieJednorodne(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
-                        break;
+                if(reprezentacjaChromosomu.equals("Repre binarna chromosomu")) {
+                    List<List<Integer>> x1;
+                    List<List<Integer>> x2;
+                    switch (rodzaj) {
+                        case "Krzyżowanie Jednopunkowe":
+                            x1 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
+                            x2 = krzyzowanieJednopunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
+                            break;
+                        case "Krzyzowanie Dwupunktowe":
+                            x1 = krzyzowanieDwupunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
+                            x2 = krzyzowanieDwupunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
+                            break;
+                        case "Krzyzowanie Trzypunktowe":
+                            x1 = krzyzowanieTrzypunktowe(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
+                            x2 = krzyzowanieTrzypunktowe(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
+                            break;
+                        default:
+                            x1 = krzyzowanieJednorodne(rodzic1.chromosomy.get(0), rodzic2.chromosomy.get(0));
+                            x2 = krzyzowanieJednorodne(rodzic1.chromosomy.get(1), rodzic2.chromosomy.get(1));
+                            break;
+                    }
+                    nowaGeneracja.addAll(Arrays.asList(
+                            new Osobnik(
+                                    new Chromosom(x1.get(0), rodzic1.chromosomy.get(0).zakres),
+                                    new Chromosom(x2.get(0), rodzic1.chromosomy.get(1).zakres)),
+                            new Osobnik(
+                                    new Chromosom(x1.get(1), rodzic1.chromosomy.get(0).zakres),
+                                    new Chromosom(x2.get(1), rodzic1.chromosomy.get(1).zakres))
+                    ));
                 }
-                nowaGeneracja.addAll(Arrays.asList(
-                        new Osobnik(
-                                new Chromosom(x1.get(0), rodzic1.chromosomy.get(0).zakres),
-                                new Chromosom(x2.get(0), rodzic1.chromosomy.get(1).zakres)),
-                        new Osobnik(
-                                new Chromosom(x1.get(1), rodzic1.chromosomy.get(0).zakres),
-                                new Chromosom(x2.get(1), rodzic1.chromosomy.get(1).zakres))
-                ));
+                else {
+                    switch (rodzaj) {
+                        case "Krzyzowanie Arytmetyczne":
+                            nowaGeneracja.addAll(krzyzowanieArytmetyczne(rodzic1, rodzic2));
+                            break;
+                        default:
+                            if (rodzic1.chromosomy.get(0).wartoscRzeczywista > rodzic2.chromosomy.get(0).wartoscRzeczywista &&
+                                    rodzic1.chromosomy.get(1).wartoscRzeczywista > rodzic2.chromosomy.get(1).wartoscRzeczywista)
+                                nowaGeneracja.add(krzyzowanieHeurystyczne(rodzic1, rodzic2));
+                            if (rodzic1.chromosomy.get(0).wartoscRzeczywista < rodzic2.chromosomy.get(0).wartoscRzeczywista &&
+                                    rodzic1.chromosomy.get(1).wartoscRzeczywista < rodzic2.chromosomy.get(1).wartoscRzeczywista)
+                                nowaGeneracja.add(krzyzowanieHeurystyczne(rodzic2, rodzic1));
+                            break;
+                    }
+                }
             }
         }
         return nowaGeneracja;
@@ -286,7 +309,6 @@ public class Algorytm {
     }
 
     private List<List<Integer>> krzyzowanieJednorodne(Chromosom rodzic1, Chromosom rodzic2) {
-
         int dlugoscChromosomu = rodzic1.dlugosc;
         List<List<Integer>> dzieci = new ArrayList<>();
         List<Integer> dziecko1 = new ArrayList<>();
@@ -307,6 +329,36 @@ public class Algorytm {
         return dzieci;
     }
 
+    private List<Osobnik> krzyzowanieArytmetyczne(Osobnik rodzic1, Osobnik rodzic2) {
+        double k = random.nextDouble();
+        Chromosom dziecko1_x1 = new Chromosom(
+                (k*rodzic1.chromosomy.get(0).wartoscRzeczywista + (1-k) * rodzic2.chromosomy.get(0).wartoscRzeczywista),
+                rodzic1.chromosomy.get(0).zakres);
+        Chromosom dziecko1_x2 = new Chromosom(
+                (k*rodzic1.chromosomy.get(1).wartoscRzeczywista + (1-k) * rodzic2.chromosomy.get(1).wartoscRzeczywista),
+                rodzic1.chromosomy.get(0).zakres);
+        Chromosom dziecko2_x1 = new Chromosom(
+                ((1-k) * rodzic1.chromosomy.get(0).wartoscRzeczywista + k * rodzic2.chromosomy.get(0).wartoscRzeczywista),
+                rodzic1.chromosomy.get(0).zakres);
+        Chromosom dziecko2_x2 = new Chromosom(
+                ((1-k) * rodzic1.chromosomy.get(1).wartoscRzeczywista + k * rodzic2.chromosomy.get(1).wartoscRzeczywista),
+                rodzic1.chromosomy.get(0).zakres);
+        Osobnik dziecko1 = new Osobnik(dziecko1_x1, dziecko1_x2);
+        Osobnik dziecko2 = new Osobnik(dziecko2_x1, dziecko2_x2);
+        return Arrays.asList(dziecko1, dziecko2);
+    }
+
+    private Osobnik krzyzowanieHeurystyczne(Osobnik rodzic1, Osobnik rodzic2) {
+        double k = random.nextDouble();
+        Chromosom x1 = new Chromosom(
+                (k * (rodzic2.chromosomy.get(0).wartoscRzeczywista - rodzic1.chromosomy.get(0).wartoscRzeczywista) + rodzic1.chromosomy.get(0).wartoscRzeczywista),
+                rodzic1.chromosomy.get(0).zakres);
+        Chromosom x2 = new Chromosom(
+                (k * (rodzic2.chromosomy.get(1).wartoscRzeczywista - rodzic1.chromosomy.get(1).wartoscRzeczywista) + rodzic1.chromosomy.get(1).wartoscRzeczywista),
+                rodzic1.chromosomy.get(0).zakres);
+        return new Osobnik(x1, x2);
+    }
+
     // #####################################################################################
     // ###############################  MUTACJA  ###########################################
     // #####################################################################################
@@ -319,8 +371,11 @@ public class Algorytm {
                 case "Mutacja Dwupunktowa":
                     osobnik = mutacjaDwupunktowa(osobnik);
                     break;
-                default:
+                case "Mutacja Brzegowa":
                     osobnik = mutacjaBrzegowa(osobnik);
+                    break;
+                default:
+                    osobnik = mutacjaRownomierna(osobnik);
                     break;
             }
         }
@@ -362,6 +417,11 @@ public class Algorytm {
         return osobnik;
     }
 
+    private Osobnik mutacjaRownomierna(Osobnik osobnik) {
+        ZakresZmiennej[] zakresyZmiennych = {osobnik.chromosomy.get(0).zakres, osobnik.chromosomy.get(1).zakres};
+        return new Osobnik(zakresyZmiennych);
+    }
+
     // #####################################################################################
     // ###############################  INWERSJA  ##########################################
     // #####################################################################################
@@ -387,7 +447,11 @@ public class Algorytm {
         ZakresZmiennej[] zakresyZmiennych = {
                 new ZakresZmiennej(poczatekZakresuX1, koniecZakresuX1),
                 new ZakresZmiennej(poczatekZakresuX2, koniecZakresuX2)};
-        Populacja populacja = new Populacja(wielkoscPopulacji, zakresyZmiennych, dokladnosc);
+        Populacja populacja;
+        if(reprezentacjaChromosomu.equals("Repre binarna chromosomu"))
+            populacja = new Populacja(wielkoscPopulacji, zakresyZmiennych, dokladnosc);
+        else
+            populacja = new Populacja(wielkoscPopulacji, zakresyZmiennych);
         List<Osobnik> osobnicyDoreprodukcji;
         List<Osobnik> osobnicyOpercajeGenetyczne;
         List<String> wynikiAlgorytmu = new ArrayList<>();
@@ -403,7 +467,8 @@ public class Algorytm {
             osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, procentNajlepszych, maksymalizacja);
             osobnicyOpercajeGenetyczne = krzyzowanie(metodaKrzyzowania, osobnicyDoreprodukcji, prawdopodobienstwoKrzyzowania, (wielkoscPopulacji - iloscStrategiiElitarnej));
             osobnicyOpercajeGenetyczne.replaceAll(o -> mutacja(metodaMutacji, o, prawdopodobienstwoMutacji));
-            osobnicyOpercajeGenetyczne.replaceAll(o -> inwersja(o, prawdopodobienstwoMutacji));
+            if(reprezentacjaChromosomu.equals("Repre binarna chromosomu"))
+                osobnicyOpercajeGenetyczne.replaceAll(o -> inwersja(o, prawdopodobienstwoMutacji));
             populacja.osobnicy.removeAll(populacja.osobnicy.subList(iloscStrategiiElitarnej, populacja.wielkoscPopulacji));
             populacja.osobnicy.addAll(osobnicyOpercajeGenetyczne);
 
