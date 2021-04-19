@@ -1,4 +1,4 @@
-#Genetic Algorithms
+# Genetic Algorithms
 
 The project presents the operation of genetic algorithms on the example 
 of McCornick functions using the Graphical Interface:
