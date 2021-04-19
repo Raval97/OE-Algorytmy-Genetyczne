@@ -60,6 +60,12 @@ public class Algorytm {
         this.prawdopodobienstwoMutacji = prawdopodobienstwoMutacji;
         this.prawdopodobienstwoInwersji = prawdopodobienstwoInwersji;
         this.maksymalizacja = maksymalizacja;
+
+//        if(!this.reprezentacjaChromosomu.equals("Repre binarna chromosomu") && this.maksymalizacja){
+//            this.reprezentacjaChromosomu = "Repre binarna chromosomu";
+//            this.metodaKrzyzowania = "Krzyzowanie Trzypunktowe";
+//            this.metodaMutacji = "Mutacja Dwupunktowa";
+//        }
     }
 
     // MCCORMICK FUNCTION
@@ -355,7 +361,7 @@ public class Algorytm {
                 rodzic1.chromosomy.get(0).zakres);
         Chromosom x2 = new Chromosom(
                 (k * (rodzic2.chromosomy.get(1).wartoscRzeczywista - rodzic1.chromosomy.get(1).wartoscRzeczywista) + rodzic1.chromosomy.get(1).wartoscRzeczywista),
-                rodzic1.chromosomy.get(0).zakres);
+                rodzic1.chromosomy.get(1).zakres);
         return new Osobnik(x1, x2);
     }
 
@@ -461,23 +467,27 @@ public class Algorytm {
         fx_populacji.add(populacja.obliczSredniaFunkcjePrzystsowania(5));
         wynikiAlgorytmu.add("EPOKA 0\tfx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5)
                 + "\t\tnajlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
-//        System.out.println("fx_populacji_startowej=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + " \n");
 
         for (int i = 0; i < iloscEpok; i++) {
             osobnicyDoreprodukcji = selekcja(metodaSelekcji, populacja.osobnicy, procentNajlepszych, maksymalizacja);
+            Collections.sort(populacja.osobnicy);
+            if (maksymalizacja)
+                Collections.reverse(populacja.osobnicy);
+            populacja.osobnicy.subList(iloscStrategiiElitarnej, populacja.wielkoscPopulacji).clear();
             osobnicyOpercajeGenetyczne = krzyzowanie(metodaKrzyzowania, osobnicyDoreprodukcji, prawdopodobienstwoKrzyzowania, (wielkoscPopulacji - iloscStrategiiElitarnej));
             osobnicyOpercajeGenetyczne.replaceAll(o -> mutacja(metodaMutacji, o, prawdopodobienstwoMutacji));
             if(reprezentacjaChromosomu.equals("Repre binarna chromosomu"))
                 osobnicyOpercajeGenetyczne.replaceAll(o -> inwersja(o, prawdopodobienstwoMutacji));
-            populacja.osobnicy.removeAll(populacja.osobnicy.subList(iloscStrategiiElitarnej, populacja.wielkoscPopulacji));
             populacja.osobnicy.addAll(osobnicyOpercajeGenetyczne);
 
             fx_populacji.add(populacja.obliczSredniaFunkcjePrzystsowania(5));
             odchylenieStandardowe.add(populacja.liczOdchylenie());
             wynikiAlgorytmu.add("epoka " + (i + 1) + " \tfx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5)
-                    + "\t\tnajlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
+                    + "\t\tnajlepszy_osobnik_fx: " + populacja.osobnicy.get(0).wartoscFunkcjiPrzystsowania +"\n");// populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania + "\n");
 //            System.out.print("epoka  " + (i + 1) + " fx_populacji=" + populacja.obliczSredniaFunkcjePrzystsowania(5) + "\t\t");
+//            populacja.osobnicy.forEach(e -> System.out.println(e.wartoscFunkcjiPrzystsowania));
 //            System.out.println("najlepszy_osobnik_fx: " + populacja.najlepszyOsobnik(maksymalizacja).wartoscFunkcjiPrzystsowania);
+
         }
 
         long endTime = System.currentTimeMillis();

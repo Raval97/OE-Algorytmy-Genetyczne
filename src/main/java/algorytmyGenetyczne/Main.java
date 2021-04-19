@@ -169,9 +169,9 @@ public class Main extends Application {
 
     public void ustawWartosciDomyslne(){
         metodaSelekcjiForm.setValue(metodaSelekcjiForm.getItems().get(1));
-        metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(0));
+        metodaKrzyzowaniaForm.setValue(metodaKrzyzowaniaForm.getItems().get(1));
         metodaMutacjiForm.setValue(metodaMutacjiForm.getItems().get(0));
-        rodzajOptymalizacjiForm.setValue(rodzajOptymalizacjiForm.getItems().get(0));
+        rodzajOptymalizacjiForm.setValue(rodzajOptymalizacjiForm.getItems().get(1));
         poczatekZakresuX1Form.setText("-1.5");
         koniecZakresuX1Form.setText("4");
         poczatekZakresuX2Form.setText("-3");

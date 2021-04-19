@@ -35,7 +35,7 @@ public class Chromosom {
         reprezentacjaBinarna = false;
         this.zakres = zakres;
         Random random = new Random();
-        wartoscRzeczywista = (random.nextInt() % zakres.zakresKoncowy - zakres.zakresPoczatkowy) + zakres.zakresPoczatkowy;
+        wartoscRzeczywista = random.nextInt((int)(zakres.zakresKoncowy - zakres.zakresPoczatkowy)) + zakres.zakresPoczatkowy;
     }
 
     public Chromosom(double wartoscRzeczywista, ZakresZmiennej zakres) {
