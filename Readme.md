@@ -1,13 +1,15 @@
 # Genetic Algorithms
 
+## Java Project verison:
+
 The project presents the operation of genetic algorithms on the example 
 of McCornick functions using the Graphical Interface:
 
-![Image description](img/1.png?raw=true)
+![Image description](JavaProject/img/1.png?raw=true)
 
 The Graphical Interface was created using the Java language, and the JFrame package.
 
-![Image description](img/2.png?raw=true)
+![Image description](JavaProject/img/2.png?raw=true)
 
 As part of an activity, you can set values:
 - range of variables x1 and x2
@@ -46,7 +48,7 @@ As a result, a folder is returned containing:
 - graph of the standard deviation from successive eopok
 - a graph of the average adaptation of the population from subsequent epochs
 
-![Image description](img/3.png?raw=true)
+![Image description](JavaProject/img/3.png?raw=true)
 
 
 
