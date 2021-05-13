@@ -8,6 +8,7 @@ import sys
 import array
 import numpy
 import math
+import copy
 
 
 
@@ -40,8 +41,10 @@ def heuristic(val1, val2):
     ind2 = k * (val2[1] - val1[1]) + val1[1]
     return ind1, ind2
 
+# value = input("cos tam")
 
 if __name__ == "__main__":
+    krzyzowanie = "h"
 
     print("start")
     # creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -56,7 +59,9 @@ if __name__ == "__main__":
     toolbox.register("evaluate", fitnessFunction)
     toolbox.register("select", tools.selTournament, tournsize=3)  # inne mtody
     # toolbox.register("mate", tools.cxSimulatedBinary, eta=0.8)  # heurystyczna i ta druga
-    toolbox.register("mate", heuristic)  # heurystyczna i ta druga
+    if(krzyzowanie == "h"):
+        toolbox.register("mate", heuristic)
+    # toolbox.register("mate", heuristic)
     toolbox.register("mutate", tools.mutGaussian, mu=5, sigma=10, indpb=0.1)  # przetestowac inne
     sizePopulation = 100
     probabilityMutation = 0.2
@@ -81,10 +86,30 @@ if __name__ == "__main__":
             listElitism.append(tools.selBest(pop, 1)[0])
 
         # Apply crossover and mutation on the offspring
+        # if(krzyzowanie == "h"):
+        #     offspringCopy = copy.copy(offspring)
+        #     offspring.clear()
+        #     size = len(offspringCopy)
+        #     while (len(offspring) < size):
+        #         child1 = offspringCopy[random.randint(0, size/2-1)]
+        #         child2 = offspringCopy[random.randint(size/2, size-1)]
+        #         if((child1[0] > child2[0] and child1[1] > child2[1]) or
+        #             child1[0] < child2[0] and child1[1] < child2[1]):
+        #             indyviduals = toolbox.mate(child1, child2)
+        #             child1 = indyviduals
+        #             print(indyviduals)
+        #             print("aa")
+        #             print(child1)
+        #
+        #             offspring.append(child1)
+
         for child1, child2 in zip(offspring[::2], offspring[1::2]):
             # cross two individuals with probability CXPB
             if random.random() < probabilityCrossover:
                 toolbox.mate(child1, child2)
+                # print(type(toolbox.mate(child1, child2)))
+                # print('aaa')
+                # print(type(child1))
             # fitness values of the children
             # must be recalculated later
             del child1.fitness.values
