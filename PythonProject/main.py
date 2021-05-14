@@ -1,12 +1,14 @@
+import math
 import multiprocessing
 import random
 import time
-import math
+from itertools import repeat
+
+import matplotlib.pyplot as plt
 from deap import base
 from deap import creator
 from deap import tools
-import matplotlib.pyplot as plt
-from itertools import repeat
+
 try:
     from collections.abc import Sequence
 except ImportError:
@@ -86,7 +88,7 @@ def set_mutation_method(type, probability_mutation):
     if type == 1:
         toolbox.register("mutate", mutUniformIntOurSelf, low=[-1.5, -3], up=4, indpb=probability_mutation)
     if type == 2:
-        toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=0.002, indpb=probability_mutation)
+        toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=0.2, indpb=probability_mutation)
     if type == 3:
         toolbox.register("mutate", tools.mutPolynomialBounded, eta=0.5, low=[-1.5, -3], up=4, indpb=probability_mutation)
     # if muttype == 4:
@@ -106,24 +108,28 @@ def individual(icls):
 
 
 def main_ui():
-    print("Select type of algorithm: ")
+    print("##############################################")
+    print("############  Genetic Algorithm  #############")
+    print("#####  Optimization McCornick Functions  #####")
+    print("##############################################\n")
+    print("Select type of optimization: ")
     print("1. Minimization")
     print("2. Maximization")
     optimalization_type = int(input())
-    print("Select type of selection: ")
+    print("Select method of selection: ")
     print("1. Tournament")
     print("2. Random")
     print("3. Best")
     print("4. Worst")
     print("5. Roulette")
     select_type = int(input())
-    print("Select type of crossing: ")
+    print("Select method of crossing: ")
     print("1. Arithmetic")
     print("2. Heuristic")
     print("3. One Point")
     print("4. Uniform")
     cx_type = int(input())
-    print("Select type of mutation: ")
+    print("Select method of mutation: ")
     print("1. Uniform Int")
     print("2. Gaussian")
     print("3. Polynomial bounded")
@@ -148,10 +154,33 @@ def set_algorithm(select_type, find_element_type, cx_type, mut_type, probability
 
 
 def generate_plot(value, yLabel, title):
-    plt.xlabel("epoch")
-    plt.ylabel(yLabel)
-    plt.title(title)
+    plt.xlabel("epoch", fontsize=10)
+    plt.ylabel(yLabel, fontsize=10)
+    plt.title(title, fontsize=10)
     plt.plot(value)
+    plt.tight_layout()
+    plt.show()
+
+
+def example_plot(ax, value, ylabel, title):
+    ax.plot(value, linewidth=1)
+    ax.set_xlabel('epochs', fontsize=6)
+    ax.set_ylabel(ylabel, fontsize=6)
+    ax.set_title(title, fontsize=6, fontweight='bold')
+
+
+def generate_plots(best, mean, std):
+    plt.figure(figsize=(15, 10), dpi=100)
+    plt.rcParams.update({'font.size': 4})
+    ax1 = plt.subplot(211)
+    ax2 = plt.subplot(223)
+    ax3 = plt.subplot(224)
+    # fig = plt.gcf()
+    # fig.set_size_inches(20, 20, forward=True)
+    example_plot(ax1, best, "fitness", "Best function fitness")
+    example_plot(ax2, mean, "population fitness", "Mean fitness of population")
+    example_plot(ax3, std, "Std value", "Standard deviation")
+    # plt.subplots_adjust(top=0.9)
     plt.show()
 
 
@@ -231,20 +260,25 @@ def run_algorithm(pop):
         #
     print("-- End of (successful) evolution --")
     print("\nAlgorithm Duration: ", time.time() - start_time)
-    generate_plot(best_list, "fitness", "Best function fitness")
-    generate_plot(mean_list, "population fitness", "Mean fitness of population")
-    generate_plot(std_list, "MSD", "Mean standard deviation")
+    generate_plots(best_list, mean_list, std_list)
+    # generate_plot(best_list, "fitness", "Best function fitness")
+    # generate_plot(mean_list, "population fitness", "Mean fitness of population")
+    # generate_plot(std_list, "MSD", "Mean standard deviation")
 
 
 if __name__ == '__main__':
-
+    epoch = 100
     population_size = 100
     mutation_probability = 0.2
     crossover_probability = 0.8
-    epoch = 300
     toolbox = base.Toolbox()
     select, find_element, cross, mut = main_ui()
     pop = set_algorithm(select, find_element, cross, mut, mutation_probability)
     pool = multiprocessing.Pool(processes=4)
     toolbox.register("map", pool.map)
     run_algorithm(pop)
+    pool.close()
+
+# 4: 25.33812713623047
+# 2: 24.50377869606018
+# 1: 25.72955870628357
