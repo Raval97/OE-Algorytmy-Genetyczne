@@ -3,7 +3,6 @@ import multiprocessing
 import random
 import time
 from itertools import repeat
-
 import matplotlib.pyplot as plt
 from deap import base
 from deap import creator
@@ -13,6 +12,22 @@ try:
     from collections.abc import Sequence
 except ImportError:
     from collections import Sequence
+
+
+def mutUniformIntOurSelf(individual, low, up, indpb):
+    size = len(individual)
+    if not isinstance(low, Sequence):
+        low = repeat(low, size)
+    elif len(low) < size:
+        raise IndexError("low must be at least the size of individual: %d < %d" % (len(low), size))
+    if not isinstance(up, Sequence):
+        up = repeat(up, size)
+    elif len(up) < size:
+        raise IndexError("up must be at least the size of individual: %d < %d" % (len(up), size))
+    for i, xl, xu in zip(range(size), low, up):
+        if random.random() < indpb:
+            individual[i] = random.uniform(xl, xu)
+    return individual,
 
 
 def cxArithemtic(ind1, ind2):
@@ -35,23 +50,7 @@ def cxHeuristic(ind1, ind2):
     return new_ind
 
 
-def mutUniformIntOurSelf(individual, low, up, indpb):
-    size = len(individual)
-    if not isinstance(low, Sequence):
-        low = repeat(low, size)
-    elif len(low) < size:
-        raise IndexError("low must be at least the size of individual: %d < %d" % (len(low), size))
-    if not isinstance(up, Sequence):
-        up = repeat(up, size)
-    elif len(up) < size:
-        raise IndexError("up must be at least the size of individual: %d < %d" % (len(up), size))
-    for i, xl, xu in zip(range(size), low, up):
-        if random.random() < indpb:
-            individual[i] = random.uniform(xl, xu)
-    return individual,
-
-
-def set_type_of_find_element(type):
+def set_optimization(type):
     if type == 1:
         creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
         creator.create("Individual", list, fitness=creator.FitnessMin)
@@ -90,13 +89,15 @@ def set_mutation_method(type, probability_mutation):
     if type == 2:
         toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=0.2, indpb=probability_mutation)
     if type == 3:
-        toolbox.register("mutate", tools.mutPolynomialBounded, eta=0.5, low=[-1.5, -3], up=4, indpb=probability_mutation)
+        toolbox.register("mutate", tools.mutPolynomialBounded, eta=0.5, low=[-1.5, -3], up=4,
+                         indpb=probability_mutation)
     # if muttype == 4:
     #     toolbox.register("mutate", tools.mutShuffleIndexes, indpb=probability_mutation)
 
 
 def fitness_function(individual):
-    result = math.sin((individual[0] + individual[1])) + math.pow((individual[0] - individual[1]), 2) - 1.5 * individual[0] + 2.5 * individual[1] + 1;
+    result = math.sin((individual[0] + individual[1])) + math.pow((individual[0] - individual[1]), 2) - 1.5 * \
+             individual[0] + 2.5 * individual[1] + 1;
     return result,
 
 
@@ -112,10 +113,12 @@ def main_ui():
     print("############  Genetic Algorithm  #############")
     print("#####  Optimization McCornick Functions  #####")
     print("##############################################\n")
+    print("**********************************************")
     print("Select type of optimization: ")
     print("1. Minimization")
     print("2. Maximization")
     optimalization_type = int(input())
+    print("**********************************************")
     print("Select method of selection: ")
     print("1. Tournament")
     print("2. Random")
@@ -123,23 +126,26 @@ def main_ui():
     print("4. Worst")
     print("5. Roulette")
     select_type = int(input())
+    print("**********************************************")
     print("Select method of crossing: ")
     print("1. Arithmetic")
     print("2. Heuristic")
     print("3. One Point")
     print("4. Uniform")
     cx_type = int(input())
+    print("**********************************************")
     print("Select method of mutation: ")
     print("1. Uniform Int")
     print("2. Gaussian")
     print("3. Polynomial bounded")
     # print("4. Shuffle indexes")
     mut_type = int(input())
+    print("**********************************************")
     return select_type, optimalization_type, cx_type, mut_type
 
 
 def set_algorithm(select_type, find_element_type, cx_type, mut_type, probability_mutation):
-    set_type_of_find_element(find_element_type)
+    set_optimization(find_element_type)
     toolbox.register('individual', individual, creator.Individual)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("evaluate", fitness_function)
@@ -175,8 +181,6 @@ def generate_plots(best, mean, std):
     ax1 = plt.subplot(211)
     ax2 = plt.subplot(223)
     ax3 = plt.subplot(224)
-    # fig = plt.gcf()
-    # fig.set_size_inches(20, 20, forward=True)
     example_plot(ax1, best, "fitness", "Best function fitness")
     example_plot(ax2, mean, "population fitness", "Mean fitness of population")
     example_plot(ax3, std, "Std value", "Standard deviation")
@@ -197,9 +201,9 @@ def run_algorithm(pop):
 
         list_elitism = []
         for x in range(0, number_elitism):
-                best = tools.selBest(pop, 1)[0]
-                list_elitism.append(best)
-                pop.remove(best)
+            best = tools.selBest(pop, 1)[0]
+            list_elitism.append(best)
+            pop.remove(best)
 
         # Select the next generation individuals
         selected = toolbox.select(pop, (len(pop) // 3))
@@ -210,7 +214,7 @@ def run_algorithm(pop):
         while (len(offspring) < len(pop)):
             offspring.append(toolbox.clone(selected[iter]))
             iter += 1
-            if(iter == len(selected)):
+            if (iter == len(selected)):
                 iter = 0
         pop[:] = offspring
 
@@ -267,8 +271,8 @@ def run_algorithm(pop):
 
 
 if __name__ == '__main__':
-    epoch = 100
-    population_size = 100
+    epoch = 1000
+    population_size = 1000
     mutation_probability = 0.2
     crossover_probability = 0.8
     toolbox = base.Toolbox()
@@ -279,6 +283,6 @@ if __name__ == '__main__':
     run_algorithm(pop)
     pool.close()
 
-# 4: 25.33812713623047
-# 2: 24.50377869606018
-# 1: 25.72955870628357
+# 4: 23.53812713623047
+# 2: 25.386533737182617
+# 1: 26.30668354034424
